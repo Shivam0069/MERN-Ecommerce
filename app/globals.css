@@ -2,32 +2,654 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.load-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #fdba2c;
+}
+.bars {
+  content: "";
+  display: inline;
+  position: absolute;
+  width: 0;
+  height: 100%;
+  left: 50%;
+  text-align: center;
+}
+.bars:nth-child(1) {
+  background-color: #da4733;
+  animation: loading 3s linear infinite;
+}
+.bars:nth-child(2) {
+  background-color: #3b78e7;
+  animation: loading 3s linear 1s infinite;
+}
+.bars:nth-child(3) {
+  background-color: #fdba2c;
+  animation: loading 3s linear 2s infinite;
+}
+@keyframes loading {
+  from {
+    left: 50%;
+    width: 0;
+    z-index: 100;
   }
+  33.3333% {
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  to {
+    left: 0;
+    width: 100%;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* dashboard.scss translated to Tailwind CSS classes */
+
+.dashboard {
+  @apply overflow-y-auto scrollbar-hide;
+
+  .bar {
+    @apply h-16 flex items-center px-4 border-b border-gray-400;
+    input {
+      @apply mr-auto w-full p-4 bg-inherit border-none outline-none;
+    }
+    svg {
+      @apply text-lg opacity-70;
+    }
+    img {
+      @apply w-8 h-8 rounded-full;
+    }
+  }
+
+  .widget-container {
+    @apply flex justify-between items-stretch gap-8 py-8 pr-8;
+
+    .widget {
+      @apply w-[240px] bg-white shadow-lg py-8 px-6 rounded-lg flex justify-between items-stretch gap-0;
+
+      .widget-info {
+        p {
+          @apply opacity-70 text-sm;
+        }
+        h4 {
+          @apply text-2xl;
+        }
+        span {
+          @apply flex items-center gap-1;
+        }
+      }
+
+      .widget-circle {
+        @apply relative w-20 h-20 rounded-full flex-none grid place-items-center bg-[#253c48];
+        &::before {
+          @apply absolute w-16 h-16 bg-white rounded-full;
+        }
+        span {
+          @apply relative;
+        }
+      }
+    }
+  }
+
+  .graph-container {
+    @apply flex items-stretch gap-8 p-0 pr-8;
+    div {
+      @apply bg-white rounded-lg;
+    }
+
+    .revenue-chart {
+      @apply w-full p-8;
+
+      h2 {
+        @apply tracking-tight font-light uppercase my-4 text-center;
+      }
+    }
+
+    .dashboard-categories {
+      @apply w-full max-w-xs flex flex-col items-center gap-0 pb-8;
+      h2 {
+        @apply tracking-tight font-light uppercase my-6 text-center;
+      }
+
+      div {
+        @apply overflow-y-auto max-h-[640px]   scrollbar-hide;
+      }
+
+      .category-item {
+        @apply flex justify-between items-center py-4 px-2;
+        h5 {
+          @apply tracking-wide font-light;
+        }
+        div {
+          @apply ml-auto w-24 bg-gray-300 rounded-lg h-2 flex-none;
+          div {
+            @apply rounded-lg h-full;
+          }
+        }
+        span {
+          @apply text-sm font-bold;
+        }
+      }
+    }
+  }
+
+  .transaction-container {
+    @apply flex gap-4 p-0 pr-8 max-h-[480px];
+
+    div {
+      @apply bg-white shadow-lg rounded-lg;
+    }
+    .gender-chart {
+      @apply w-full max-w-xs p-4 relative;
+      h2 {
+        @apply tracking-tight font-light uppercase my-6 text-center;
+      }
+      p {
+        @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-gray-400;
+      }
+    }
+
+    .transaction-box {
+      @apply w-full px-4 overflow-x-auto;
+      h2 {
+        @apply my-6 tracking-tight font-light uppercase;
+      }
+    }
+  }
+}
+/* app.scss translated to Tailwind CSS classes */
+
+/* Global styles */
+:root {
+  @apply font-sans;
+}
+
+* {
+  @apply m-0 p-0 box-border;
+}
+
+a {
+  @apply no-underline text-black;
+}
+
+.red {
+  @apply text-red-500;
+}
+.purple {
+  @apply text-purple-500;
+}
+.green {
+  @apply text-green-500;
+}
+
+/* Admin container */
+.admin-container {
+  @apply grid grid-cols-[1fr,4fr] gap-8 py-4 px-2 scrollbar-hide bg-gray-100 h-[calc(100vh-41px)];
+  aside {
+    @apply w-full bg-white p-4 z-10 overflow-y-auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    div {
+      @apply m-8;
+      h5 {
+        @apply tracking-tight font-light uppercase opacity-80 my-4;
+      }
+      ul {
+        @apply flex flex-col gap-2.5 list-none;
+        li {
+          @apply p-2.5 rounded-lg;
+          a {
+            @apply text-gray-800 flex items-center;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Table styles */
+.table {
+  @apply table-fixed w-full;
+  th,
+  td {
+    @apply p-1 text-center;
+  }
+
+  th {
+    @apply font-semibold text-gray-800 text-lg  p-8;
+  }
+
+  tbody {
+    tr {
+      @apply shadow-sm;
+    }
+
+    td {
+      @apply p-4 text-center;
+
+      img {
+        @apply w-16 h-16 object-contain rounded-lg mx-auto;
+      }
+      a {
+        @apply no-underline bg-blue-100 text-blue-500 px-2 py-1 rounded-lg;
+      }
+      button {
+        @apply w-8 h-8 text-lg border-none outline-none bg-transparent cursor-pointer text-red-500 hover:opacity-60;
+      }
+
+      &:first-child {
+        @apply border-l-0;
+      }
+
+      &:last-child {
+        @apply border-r-0;
+      }
+    }
+  }
+}
+
+.table-pagination {
+  @apply flex justify-center items-center gap-4 p-8;
+  button {
+    @apply px-4 py-2 border-none outline-none rounded-lg cursor-pointer bg-blue-600 text-white disabled:bg-blue-200 disabled:cursor-not-allowed;
+  }
+}
+
+#hamburger {
+  @apply grid place-items-center w-12 h-12 border-none outline-none cursor-pointer text-blue-500 fixed top-4 left-4 text-2xl bg-white rounded-full z-10;
+}
+
+#close-sidebar {
+  @apply w-4/5 m-4 block py-3 border-none outline-none cursor-pointer bg-red-600 text-white rounded-lg;
+}
+
+.loader {
+  @apply w-full h-screen flex justify-center items-center;
+  div {
+    @apply w-40 h-40 border-8 border-t-8 border-t-transparent border-l-gray-800 border-r-white border-b-white rounded-full animate-spin;
+  }
+}
+
+@keyframes loading-animation {
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+.dashboard-product-box {
+  @apply bg-white p-8 overflow-y-auto w-full max-h-[calc(100vh-41px)] scrollbar-hide;
+}
+.create-product-btn {
+  @apply fixed right-14 top-16 w-10 h-10 flex justify-center items-center rounded-full bg-red-600 text-white hover:opacity-80;
+}
+.product-delete-btn {
+  @apply bg-gray-800 text-white text-xl w-10 h-10 flex justify-center items-center rounded-full cursor-pointer border-none absolute top-1 right-1;
+}
+.product-management {
+  @apply flex flex-row justify-center items-center p-16;
+
+  > section {
+    @apply overflow-y-auto w-full h-[85vh] max-w-[450px] shadow-md bg-white p-20 flex flex-col gap-4 relative rounded-lg scrollbar-hide;
+    h2 {
+      @apply tracking-tight font-light uppercase text-center;
+    }
+    img {
+      @apply w-full h-full object-contain;
+    }
+    strong {
+      @apply font-light;
+    }
+    span {
+      @apply absolute right-8 top-8;
+    }
+    p {
+      @apply text-center tracking-wide uppercase;
+    }
+    h3 {
+      @apply text-center text-2xl;
+    }
+  }
+
+  > article {
+    @apply h-[85vh] p-8 w-full max-w-[450px] bg-white rounded-lg shadow-lg relative;
+
+    > form {
+      @apply flex flex-col items-center gap-8;
+      h2 {
+        @apply uppercase tracking-wide;
+      }
+      img {
+        @apply w-20 h-20 object-cover rounded-lg;
+      }
+      div {
+        @apply w-full relative;
+        label {
+          @apply absolute left-0 top-[-1.5rem];
+        }
+        input {
+          @apply w-full p-4 bg-inherit border border-gray-300 rounded-lg outline-none;
+        }
+      }
+      button {
+        @apply p-4 border-none bg-blue-700 text-white w-full rounded-lg text-lg cursor-pointer;
+      }
+    }
+  }
+
+  .shipping-info-card {
+    h1 {
+      @apply text-center tracking-tight font-light uppercase;
+    }
+    h5 {
+      @apply mt-8 text-lg font-bold;
+    }
+    p {
+      @apply m-2;
+    }
+    .shipping-btn {
+      @apply my-8 p-4 border-none bg-blue-700 text-white w-full rounded-lg text-lg cursor-pointer hover:opacity-80;
+    }
+  }
+}
+.transaction-product-card {
+  @apply flex items-center gap-4;
+
+  img {
+    @apply w-16 h-16 object-cover rounded-lg;
+  }
+  span {
+    @apply ml-auto;
+  }
+}
+
+/* Tailwind CSS with @apply for Responsive Styles */
+
+@media screen and (max-width: 1200px) {
+  .admin-container {
+    @apply overflow-auto;
+  }
+
+  .dashboard {
+    .widget-container,
+    .graph-container,
+    .transaction-container {
+      @apply justify-center flex-wrap;
+    }
+    .graph-container {
+      @apply p-8;
+    }
+    .transaction-container {
+      @apply p-8 h-auto;
+    }
+  }
+
+  .product-management {
+    @apply p-8;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .admin-container {
+    @apply grid-cols-1 !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cart {
+    @apply block p-8;
+
+    > main {
+      @apply w-full;
+    }
+    > aside {
+      @apply w-full;
+    }
+  }
+
+  .cartitem {
+    @apply w-full;
+
+    > img {
+      @apply w-12 h-12;
+    }
+    > div {
+      @apply flex-col gap-0;
+    }
+  }
+
+  .product-search-page {
+    @apply block p-0;
+
+    > aside {
+      @apply flex justify-between items-center flex-wrap shadow-none;
+
+      > h2 {
+        @apply tracking-tight font-light uppercase text-lg;
+      }
+    }
+
+    > main > input {
+      @apply w-full border border-gray-300;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .product-management {
+    @apply flex-col items-center p-0;
+
+    > section {
+      @apply max-w-sm;
+    }
+  }
+
+  .chart-container {
+    @apply p-0 scrollbar-hide;
+
+    > h1 {
+      @apply m-0 text-center;
+    }
+
+    > section {
+      @apply my-32;
+    }
+  }
+
+  .dashboard-app-container > section {
+    .coupon-form,
+    .stopwatch {
+      @apply flex flex-col;
+    }
+
+    .stopwatch {
+      @apply items-center;
+    }
+  }
+}
+
+/* Tailwind CSS with @apply for .dashboard-app-container */
+
+.dashboard-app-container {
+  @apply bg-white p-16;
+
+  > section {
+    @apply flex flex-col items-center justify-center gap-8 h-full;
+
+    .stopwatch {
+      > h2 {
+        @apply text-2xl font-light text-center;
+      }
+
+      > button {
+        @apply p-4 border-none cursor-pointer text-white m-8 font-bold rounded-lg;
+
+        &:first-of-type {
+          @apply bg-blue-600;
+        }
+
+        &:last-of-type {
+          @apply bg-red-600;
+        }
+      }
+    }
+
+    .tosscoin {
+      @apply m-8 relative cursor-pointer transform-none transition-all duration-500 w-60 h-60;
+
+      > div {
+        @apply rounded-full absolute grid place-items-center bg-no-repeat bg-contain drop-shadow-lg w-full h-full;
+        background-size: contain;
+      }
+    }
+
+    .coupon-form {
+      @apply grid grid-cols-[2fr,1fr] gap-8 max-w-md w-full;
+
+      > input {
+        @apply p-4 border border-gray-300 outline-none rounded-lg;
+      }
+
+      > fieldset {
+        @apply p-4 border border-gray-300 rounded-lg flex items-center justify-center gap-0 flex-wrap col-span-2;
+
+        span {
+          @apply text-xs font-light ml-1 mr-4;
+        }
+      }
+
+      > button {
+        @apply font-bold text-lg w-full p-4 border-none text-white cursor-pointer my-8 rounded-lg col-span-2 bg-blue-600;
+      }
+    }
+
+    > code {
+      @apply relative text-lg tracking-wider cursor-pointer;
+
+      &:hover > span {
+        @apply opacity-100;
+      }
+
+      > span {
+        @apply opacity-0 absolute w-full h-full top-0 left-0 rounded-lg bg-gray-900 text-white text-xs flex items-center justify-center;
+      }
+    }
+  }
+}
+
+/* Tailwind CSS with @apply for .chart-container */
+
+.chart-container {
+  @apply bg-white p-16 overflow-y-auto;
+
+  > h1 {
+    @apply mb-20 ml-8;
+  }
+
+  > section {
+    @apply w-80 mx-auto my-16;
+
+    > div {
+      @apply max-w-[25rem] mx-auto mt-24 mb-[1rem];
+    }
+
+    > h2 {
+      @apply mt-8 text-center;
+    }
+  }
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
 }

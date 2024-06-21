@@ -1,7 +1,10 @@
+import Header from "@/components/header";
+import { StoreProvider } from "@/store/StoreProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
-
+import Layout from "@/helper/LayoutProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,8 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <StoreProvider>
+      <html lang="en" className="scrollbar-hide">
+        <body className={inter.className}>
+          <Toaster position="bottom-center" />
+          <Layout>{children}</Layout>
+          <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
