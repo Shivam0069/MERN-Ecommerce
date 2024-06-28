@@ -35,7 +35,7 @@ export const fetchUserData = createAsyncThunk<
   { state: RootState }
 >("user/fetchUserData", async (_, { getState }) => {
   try {
-    const response = await axios.post("/api/user/me");
+    const response = await axios.get("/api/user/me");
 
     return response.data.data;
   } catch (error: any) {
