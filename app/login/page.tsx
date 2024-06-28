@@ -38,7 +38,10 @@ export default function Login() {
   // const [login] = useLoginMutation();
   const loginHandler = async () => {
     try {
-      const response = await axios.post("/api/user/login", formData);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/login`,
+        formData
+      );
       dispatch(updateUser(response.data.user));
 
       toast.success("Sign Up Successful");
@@ -57,7 +60,10 @@ export default function Login() {
         email: user.email,
         type: "google",
       };
-      const response = await axios.post("/api/user/login", loginData);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/login`,
+        loginData
+      );
       console.log(response.data);
       dispatch(updateUser(response.data.user));
 

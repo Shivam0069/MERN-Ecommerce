@@ -35,7 +35,9 @@ export const fetchUserData = createAsyncThunk<
   { state: RootState }
 >("user/fetchUserData", async (_, { getState }) => {
   try {
-    const response = await axios.get("/api/user/me");
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/me`
+    );
 
     return response.data.data;
   } catch (error: any) {

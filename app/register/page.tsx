@@ -99,7 +99,10 @@ export default function Register() {
 
       console.log(googleAuthData);
 
-      const response = await axios.post("/api/user/signup", googleAuthData);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/signup`,
+        googleAuthData
+      );
 
       dispatch(updateUser(response.data.user));
 
@@ -115,7 +118,10 @@ export default function Register() {
       };
 
       try {
-        const res = await axios.post("/api/cart/new", cartData);
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/cart/new`,
+          cartData
+        );
         console.log(res, "CartResponse");
         toast.success("Cart Created");
       } catch (cartError) {
@@ -166,7 +172,10 @@ export default function Register() {
         type: "credential",
       };
 
-      const response = await axios.post("/api/user/signup", data);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/signup`,
+        data
+      );
 
       // Create cart for the user after successful signup
       try {
@@ -181,7 +190,10 @@ export default function Register() {
           shippingInfo,
         };
 
-        const cartResponse = await axios.post("/api/cart/new", cartData);
+        const cartResponse = await axios.post(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/cart/new`,
+          cartData
+        );
         console.log(cartResponse, "CartResponse");
         toast.success("Cart Created");
       } catch (cartError) {

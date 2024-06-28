@@ -88,7 +88,7 @@ export default function Cart() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `/api/payments/discount?coupon=${couponCode}`
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/payments/discount?coupon=${couponCode}`
       );
       if (total > res.data.discount + 500) {
         dispatch(

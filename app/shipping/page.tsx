@@ -143,7 +143,10 @@ export default function Shipping() {
         receipt: "receipt#2",
       },
     };
-    const response = await axios.post("/api/payments/razorpay/order", data);
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/payments/razorpay/order`,
+      data
+    );
     const id = response.data.order.id;
 
     var options = {
@@ -163,7 +166,7 @@ export default function Shipping() {
 
         try {
           const res = await axios.post(
-            "/api/payments/razorpay/order/validate",
+            `${process.env.NEXT_PUBLIC_DOMAIN}/api/payments/razorpay/order/validate`,
             data
           );
           if (res.data.success) {

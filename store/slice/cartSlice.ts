@@ -51,7 +51,9 @@ export const fetchCartDbData = createAsyncThunk<
       state.cart;
     const user = state.user.userData;
     if (user?._id) {
-      const response = await axios.get("/api/cart/get");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/cart/get`
+      );
       console.log(response.data);
       const dbCartData = response?.data?.cart;
 
@@ -123,7 +125,10 @@ const updateCart = async (
         shippingCharges: state.shippingCharges,
         discount: state.discount,
       };
-      const res = await axios.put(`/api/cart/update`, cartData);
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/cart/update`,
+        cartData
+      );
       console.log(res, "updateCartRes");
     } catch (error) {
       console.log(error);

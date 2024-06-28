@@ -30,10 +30,13 @@ const Coupon = () => {
         toast.error("Enter Amount");
         return;
       }
-      const res = await axios.post(`/api/payments/coupon/new?id=${user?._id}`, {
-        coupon: coupon.toUpperCase(),
-        amount,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/payments/coupon/new?id=${user?._id}`,
+        {
+          coupon: coupon.toUpperCase(),
+          amount,
+        }
+      );
       toast.success("Coupon Generated");
       setCoupon("");
       setAmount(null);

@@ -40,7 +40,9 @@ export default function Header() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("/api/user/logout");
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/logout`
+      );
       if (res.data.success) {
         console.log("logged Out");
         dispatch(deleteCart());
