@@ -132,8 +132,9 @@ const Dashboard = () => {
             </div>
             <Table
               data={
-                data?.stats.latestTransaction.map((i) => {
+                data?.stats.latestTransaction.map((i, idx) => {
                   return {
+                    key: idx,
                     _id: i._id.slice(0, 5) + "...",
                     amount: i.amount,
                     discount: i.discount,

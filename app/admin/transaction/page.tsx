@@ -59,7 +59,8 @@ const Transaction = () => {
   useEffect(() => {
     if (data) {
       setRows(
-        data.orders.map((i: Order) => ({
+        data.orders.map((i: Order, idx) => ({
+          key: idx,
           user: i.userName,
           amount: i.total,
           discount: i.discount,

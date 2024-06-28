@@ -174,7 +174,8 @@ export async function GET(request: NextRequest) {
         male: UsersCount - femaleUsersCount,
         female: femaleUsersCount,
       };
-      const modifiedTransaction = latestTransactions.map((i) => ({
+      const modifiedTransaction = latestTransactions.map((i, idx) => ({
+        key: idx,
         _id: i._id,
         amount: i.total,
         discount: i.discount,

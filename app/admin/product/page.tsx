@@ -47,7 +47,8 @@ const Products = () => {
   useEffect(() => {
     if (data) {
       setRows(
-        data.products.map((i) => ({
+        data.products.map((i, idx) => ({
+          key: idx,
           photo: <img src={i.photo} />,
           name: i.name,
           price: i.price,

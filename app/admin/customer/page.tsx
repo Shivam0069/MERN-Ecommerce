@@ -61,7 +61,8 @@ const Customers = () => {
   useEffect(() => {
     if (data) {
       setRows(
-        data?.users.map((i) => ({
+        data?.users.map((i, idx) => ({
+          key: idx,
           avatar: <img src={i.photo} />,
           name: i.name,
           email: `${i.email.split("@")[0]} @${i.email.split("@")[1]}`,

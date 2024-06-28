@@ -23,7 +23,10 @@ export default function RootLayout({
         <body className={inter.className}>
           <Toaster position="bottom-center" />
           <Layout>{children}</Layout>
-          <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+          <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            async
+          ></script>
         </body>
       </html>
     </StoreProvider>

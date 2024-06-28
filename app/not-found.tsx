@@ -13,7 +13,7 @@ export default function NotFound() {
       <div className="space-y-2 text-center">
         <h1 className="text-8xl font-bold tracking-tighter sm:text-9xl">404</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Oops! The page you're looking for could not be found.
+          Oops! The page you&apos;re looking for could not be found.
         </p>
       </div>
       <button
