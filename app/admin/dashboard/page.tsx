@@ -96,11 +96,11 @@ const Dashboard = () => {
               <h2>Inventory</h2>
 
               <div>
-                {data?.stats.categoryCount.map((item) => {
+                {data?.stats.categoryCount.map((item, idx) => {
                   const [key, value] = Object.entries(item)[0];
                   return (
                     <CategoryItem
-                      key={key}
+                      key={idx}
                       value={value}
                       heading={key}
                       color={`hsl(${value * 4}, ${value}%, 50%)`}

@@ -28,7 +28,7 @@ const PieCharts = () => {
       setValues(values);
       setBackgroundColor(backgroundColor);
     }
-  });
+  }, [data]);
 
   return (
     <div className="admin-container">
