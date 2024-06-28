@@ -22,7 +22,7 @@ import {
   useAllFilteredProductsQuery,
   useCategoriesQuery,
 } from "@/store/api/productAPI";
-import { addToCart, calculatePrice } from "@/store/slice/cartSlice";
+import { addToCart } from "@/store/slice/cartSlice";
 import { RootState } from "@/store/store";
 import { CustomError } from "@/types/api-types";
 import { CartItem } from "@/types/types";
@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Search() {
   const { data, isLoading, isError, error } = useCategoriesQuery("");
   const { cartItems } = useSelector((state: RootState) => state.cart);
-
+  const user = useSelector((state: RootState) => state.user.userData);
   const [sortOption, setSortOption] = useState("");
   const [priceRange, setPriceRange] = useState(100000);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -76,8 +76,9 @@ export default function Search() {
       setLoading(false);
       return toast.error("Out of stock!");
     }
-    dispatch(addToCart(cartItem));
-    dispatch(calculatePrice());
+
+    dispatch(addToCart({ cartItem, user: user?._id }));
+
     toast.success("Product added to cart");
     setLoading(false);
   };

@@ -7,11 +7,19 @@ connect();
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = await getDataFromToken(request);
+    let userId;
+    try {
+      userId = await getDataFromToken(request);
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, message: "Invalid token" },
+        { status: 401 }
+      );
+    }
 
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Invalid Token" },
+        { success: false, message: "Invalid Token" },
         { status: 400 }
       );
     }
@@ -20,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: "User not found" },
+        { success: false, message: "User not found" },
         { status: 404 }
       );
     }

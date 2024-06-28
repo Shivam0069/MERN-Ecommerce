@@ -4,11 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Loader from "@/helper/loader";
-import {
-  applyCoupon,
-  calculatePrice,
-  deleteCart,
-} from "@/store/slice/cartSlice";
+import { applyCoupon, deleteCart } from "@/store/slice/cartSlice";
 import { RootState } from "@/store/store";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -80,13 +76,13 @@ export default function Cart() {
   const { cartItems, subtotal, tax, total, discount, shippingCharges } =
     useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.userData);
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const deleteCartHandler = () => {
-    dispatch(deleteCart());
-    dispatch(calculatePrice());
+    dispatch(deleteCart(user?._id));
   };
   const applyCouponHandler = async () => {
     setLoading(true);
@@ -95,8 +91,9 @@ export default function Cart() {
         `/api/payments/discount?coupon=${couponCode}`
       );
       if (total > res.data.discount + 500) {
-        dispatch(applyCoupon(Number(res.data.discount)));
-        dispatch(calculatePrice());
+        dispatch(
+          applyCoupon({ discount: Number(res.data.discount), user: user?._id })
+        );
       } else {
         toast.error("Not Eligible (Low Total Amount)");
       }
@@ -163,8 +160,7 @@ export default function Cart() {
               value={couponCode}
               onChange={(e) => {
                 setCouponCode(e.target.value);
-                dispatch(applyCoupon(0));
-                dispatch(calculatePrice());
+                dispatch(applyCoupon({ discount: 0, user: user?._id }));
               }}
               placeholder="Enter coupon code"
               className="pr-16"

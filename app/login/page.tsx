@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "@/firebase";
 import { updateUser } from "@/store/slice/userSlice";
+import { RootState } from "@/store/store";
 import axios from "axios";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 type FormData = {
   email: string;
   password: string;
@@ -24,15 +25,27 @@ export default function Login() {
     password: "",
     type: "credential",
   });
+  const {
+    cartItems,
+    subtotal,
+    total,
+    tax,
+    discount,
+    shippingCharges,
+    shippingInfo,
+  } = useSelector((state: RootState) => state.cart);
   const router = useRouter();
   // const [login] = useLoginMutation();
   const loginHandler = async () => {
     try {
       const response = await axios.post("/api/user/login", formData);
       dispatch(updateUser(response.data.user));
+
       toast.success("Sign Up Successful");
       router.push("/");
     } catch (error) {
+      console.log(error);
+
       toast.error("Error while logging in");
     }
   };
@@ -40,13 +53,14 @@ export default function Login() {
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
-      const data = {
+      const loginData = {
         email: user.email,
         type: "google",
       };
-      const response = await axios.post("/api/user/login", data);
+      const response = await axios.post("/api/user/login", loginData);
       console.log(response.data);
       dispatch(updateUser(response.data.user));
+
       toast.success("Sign Up Successful");
       router.push("/");
     } catch (error) {

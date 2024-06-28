@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../store";
 
 export interface UserState {
   _id: string;
@@ -28,18 +29,19 @@ const initialState: UserSliceState = {
 };
 
 // Async thunk to fetch user data
-export const fetchUserData = createAsyncThunk<UserState>(
-  "user/fetchUserData",
-  async () => {
-    try {
-      const response = await axios.post("/api/user/me");
+export const fetchUserData = createAsyncThunk<
+  UserState,
+  void,
+  { state: RootState }
+>("user/fetchUserData", async (_, { getState }) => {
+  try {
+    const response = await axios.post("/api/user/me");
 
-      return response.data.data;
-    } catch (error: any) {
-      console.log(error.response.data.message);
-    }
+    return response.data.data;
+  } catch (error: any) {
+    console.log(error.response.data.message);
   }
-);
+});
 
 // Redux slice for user data
 export const userSlice = createSlice({

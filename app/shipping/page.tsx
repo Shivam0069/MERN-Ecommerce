@@ -20,22 +20,17 @@ import { BiArrowBack } from "react-icons/bi";
 
 import { Button } from "@/components/ui/button";
 import Loader from "@/helper/loader";
-import {
-  addShippingAddress,
-  calculatePrice,
-  deleteCart,
-} from "@/store/slice/cartSlice";
+import { useNewOrderMutation } from "@/store/api/orderAPI";
+import { addShippingAddress, deleteCart } from "@/store/slice/cartSlice";
 import { RootState } from "@/store/store";
+import { NewOrderRequest } from "@/types/api-types";
+import { responseToast } from "@/utils/features";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Router } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { NewOrderRequest } from "@/types/api-types";
-import { useNewOrderMutation } from "@/store/api/orderAPI";
-import { responseToast } from "@/utils/features";
 declare global {
   interface Window {
     Razorpay: any;
@@ -134,7 +129,13 @@ export default function Shipping() {
     ) {
       return toast.error("Fill all the fields!");
     }
-    dispatch(addShippingAddress(newOrderData.shippingInfo));
+    dispatch(
+      addShippingAddress({
+        shipping: newOrderData.shippingInfo,
+        user: userData?._id,
+      })
+    );
+
     const data = {
       options: {
         amount: total * 100,
@@ -169,8 +170,8 @@ export default function Shipping() {
             const response = await newOrder(newOrderData);
             console.log(response, "orderResponse");
 
-            dispatch(deleteCart());
-            dispatch(calculatePrice());
+            dispatch(deleteCart(userData?._id));
+
             responseToast(response, router, "/");
           }
         } catch (error: any) {

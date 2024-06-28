@@ -10,16 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCartDataQuery, useNewCartMutation } from "@/store/api/cartAPI";
-import { calculatePrice, deleteCart, setCart } from "@/store/slice/cartSlice";
+import { deleteCart, fetchCartDbData } from "@/store/slice/cartSlice";
 import { setUserNull } from "@/store/slice/userSlice";
-import { RootState } from "@/store/store";
-import { CustomError } from "@/types/api-types";
-import { Cart, CartSlice } from "@/types/types";
+import { RootState, store } from "@/store/store";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -36,83 +33,10 @@ export default function Header() {
     shippingInfo,
   } = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user.userData);
-  let { data, isLoading, isError, error } = useCartDataQuery(user?._id!);
-  const [newCart, { isLoading: cartCreating }] = useNewCartMutation();
-
-  const createCart = async () => {
-    if (user) {
-      try {
-        const cartData = {
-          user: user?._id!,
-          cartItems,
-          tax,
-          total,
-          subtotal,
-          discount,
-          shippingCharges,
-          shippingInfo,
-        };
-        const res = await newCart({ formData: cartData, id: user?._id! });
-        console.log(res, "CartResponse");
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to create cart.");
-      }
-    }
-  };
 
   useEffect(() => {
-    if (!user) {
-      data = undefined;
-    }
-    console.log(data, "dataDB");
-  }, [user, data]);
-
-  useEffect(() => {
-    if (isError) {
-      const err = error as CustomError;
-      if (err.status === 404) {
-        createCart();
-      }
-    }
-  }, [isError, error]);
-
-  useEffect(() => {
-    if (!isLoading && data && user) {
-      if (cartItems.length > 0) {
-        let dbCartData: Cart = {
-          ...data.cart,
-          cartItems: data.cart.cartItems.map((item) => ({ ...item })),
-        };
-
-        for (let i = 0; i < cartItems.length; i++) {
-          const index = dbCartData.cartItems.findIndex(
-            (item) => item.productId === cartItems[i].productId
-          );
-          if (index !== -1) {
-            dbCartData.cartItems[index].quantity += cartItems[i].quantity;
-          } else {
-            dbCartData.cartItems.push(cartItems[i]);
-          }
-        }
-
-        const mergeData: CartSlice = {
-          cartItems: dbCartData.cartItems,
-          shippingCharges: dbCartData.shippingCharges + shippingCharges,
-          tax: dbCartData.tax + tax,
-          total: dbCartData.total + total,
-          subtotal: dbCartData.subtotal + subtotal,
-          discount: dbCartData.discount + discount,
-          shippingInfo: dbCartData.shippingInfo,
-          user: data?.cart?.user,
-        };
-
-        dispatch(setCart(mergeData));
-      } else {
-        dispatch(setCart(data.cart));
-      }
-    }
-  }, [data, isLoading, user]);
+    store.dispatch(fetchCartDbData());
+  }, [user]);
 
   const logoutHandler = async () => {
     try {
@@ -120,7 +44,6 @@ export default function Header() {
       if (res.data.success) {
         console.log("logged Out");
         dispatch(deleteCart());
-        dispatch(calculatePrice({ user: undefined }));
         dispatch(setUserNull());
         toast.success("Logout successfully");
         router.push("/");
@@ -164,7 +87,11 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-8 w-8 cursor-pointer">
-                <img src={user.photo} alt="Avatar" onError={handleImageError} />
+                <img
+                  src={user?.photo}
+                  alt="Avatar"
+                  onError={handleImageError}
+                />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

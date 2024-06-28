@@ -24,6 +24,10 @@ export type ShippingInfo = {
   country: string;
   pinCode: string;
 };
+export type AddShippingAddress = {
+  shipping: ShippingInfo;
+  user: string | undefined;
+};
 
 export type CartItemWithId = {
   productId: string;
@@ -46,6 +50,10 @@ export type CartItem = {
   price: number;
   quantity: number;
   stock: number;
+};
+export type AddToCart = {
+  cartItem: CartItem;
+  user: string | undefined;
 };
 export type OrderItem = Omit<CartItem, "stock"> & { _id: string };
 

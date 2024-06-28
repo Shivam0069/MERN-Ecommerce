@@ -1,9 +1,10 @@
 import { CartReducerInitialState } from "@/types/reducer-types";
 import {
+  AddShippingAddress,
+  AddToCart,
   CartItem,
   CartItemWithId,
   CartSlice,
-  ShippingInfo,
 } from "@/types/types";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -29,8 +30,13 @@ const initialState: CartReducerInitialState = {
   error: null,
 };
 
-const saveCartData = (state: CartReducerInitialState) => {
-  localStorage.setItem("cartData", JSON.stringify(state));
+const saveCartData = (
+  state: CartReducerInitialState,
+  user: string | undefined
+) => {
+  if (user === undefined) {
+    localStorage.setItem("cartData", JSON.stringify(state));
+  }
 };
 
 export const fetchCartDbData = createAsyncThunk<
@@ -68,6 +74,7 @@ export const fetchCartDbData = createAsyncThunk<
         }
 
         const mergeData: CartSlice = {
+          user: user?._id,
           cartItems: mergedCartItems,
           shippingCharges: dbCartData.shippingCharges + shippingCharges,
           tax: dbCartData.tax + tax,
@@ -76,8 +83,14 @@ export const fetchCartDbData = createAsyncThunk<
           discount: dbCartData.discount + discount,
           shippingInfo: dbCartData.shippingInfo,
         };
+        console.log("merge");
+        localStorage.removeItem("cartData");
         return mergeData;
       } else {
+        console.log(state.cart, "Notmerge");
+
+        console.log("Notmerge");
+
         return response.data.cart;
       }
     } else {
@@ -95,25 +108,33 @@ export const fetchCartDbData = createAsyncThunk<
   }
 });
 
-const updateCart = async (state: CartReducerInitialState) => {
-  try {
-    const cartData = {
-      cartItems: state.cartItems,
-      total: state.total,
-      shippingInfo: state.shippingInfo,
-      subtotal: state.subtotal,
-      tax: state.tax,
-      shippingCharges: state.shippingCharges,
-      discount: state.discount,
-    };
-    const res = await axios.put(`/api/cart/update`, cartData);
-    console.log(res, "updateCartRes");
-  } catch (error) {
-    console.log(error);
+const updateCart = async (
+  state: CartReducerInitialState,
+  user: string | undefined
+) => {
+  if (user !== undefined) {
+    try {
+      const cartData = {
+        cartItems: state.cartItems,
+        total: state.total,
+        shippingInfo: state.shippingInfo,
+        subtotal: state.subtotal,
+        tax: state.tax,
+        shippingCharges: state.shippingCharges,
+        discount: state.discount,
+      };
+      const res = await axios.put(`/api/cart/update`, cartData);
+      console.log(res, "updateCartRes");
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
-const calculatePriceOfCart = (state: CartReducerInitialState) => {
+const calculatePriceOfCart = (
+  state: CartReducerInitialState,
+  user: string | undefined
+) => {
   let subtotal = 0;
   state.cartItems.forEach((i: CartItem) => {
     subtotal += i.price * i.quantity;
@@ -125,44 +146,34 @@ const calculatePriceOfCart = (state: CartReducerInitialState) => {
 
   state.total =
     state.subtotal + state.tax + state.shippingCharges - state.discount;
-
-  saveCartData(state);
-  updateCart(state);
+  saveCartData(state, user);
+  updateCart(state, user);
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    setCart: (state, action: PayloadAction<CartSlice>) => {
+    addToCart: (state, action: PayloadAction<AddToCart>) => {
       state.loading = true;
-      state.cartItems = action.payload.cartItems;
-      state.tax = action.payload.tax;
-      state.discount = action.payload.discount;
-      state.shippingCharges = action.payload.shippingCharges;
-      state.total = action.payload.total;
-      state.shippingInfo = action.payload.shippingInfo;
-      state.subtotal = action.payload.subtotal;
+      const itemIndex = state.cartItems.findIndex(
+        (i) => i.productId === action.payload.cartItem.productId
+      );
+      if (itemIndex !== -1) {
+        state.cartItems[itemIndex] = action.payload.cartItem;
+      } else {
+        state.cartItems.push(action.payload.cartItem);
+      }
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload.user);
     },
-    addToCart: (state, action: PayloadAction<CartItem>) => {
+    removeCartItem: (
+      state,
+      action: PayloadAction<{ productId: string; user: string | undefined }>
+    ) => {
       state.loading = true;
       const itemIndex = state.cartItems.findIndex(
         (i) => i.productId === action.payload.productId
-      );
-      if (itemIndex !== -1) {
-        state.cartItems[itemIndex] = action.payload;
-      } else {
-        state.cartItems.push(action.payload);
-      }
-      state.loading = false;
-      calculatePriceOfCart(state);
-    },
-    removeCartItem: (state, action: PayloadAction<string>) => {
-      state.loading = true;
-      const itemIndex = state.cartItems.findIndex(
-        (i) => i.productId === action.payload
       );
       if (itemIndex !== -1) {
         if (state.cartItems[itemIndex].quantity > 1) {
@@ -173,36 +184,42 @@ export const cartSlice = createSlice({
       }
       state.discount = 0;
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload.user);
     },
-    deleteCartItem: (state, action: PayloadAction<string>) => {
+    deleteCartItem: (
+      state,
+      action: PayloadAction<{ productId: string; user: string | undefined }>
+    ) => {
       state.loading = true;
       state.cartItems = state.cartItems.filter(
-        (i: CartItem) => i.productId !== action.payload
+        (i: CartItem) => i.productId !== action.payload.productId
       );
       state.discount = 0;
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload.user);
     },
-    deleteCart: (state) => {
+    deleteCart: (state, action: PayloadAction<string | undefined>) => {
       state.loading = true;
       state.cartItems = [];
 
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload);
     },
 
-    applyCoupon: (state, action: PayloadAction<number>) => {
+    applyCoupon: (
+      state,
+      action: PayloadAction<{ discount: number; user: string | undefined }>
+    ) => {
       state.loading = true;
-      state.discount = action.payload;
+      state.discount = action.payload.discount;
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload.user);
     },
-    addShippingAddress: (state, action: PayloadAction<ShippingInfo>) => {
+    addShippingAddress: (state, action: PayloadAction<AddShippingAddress>) => {
       state.loading = true;
-      state.shippingInfo = action.payload;
+      state.shippingInfo = action.payload.shipping;
       state.loading = false;
-      calculatePriceOfCart(state);
+      calculatePriceOfCart(state, action.payload.user);
     },
   },
   extraReducers: (builder) => {
@@ -222,7 +239,7 @@ export const cartSlice = createSlice({
         state.subtotal = action.payload.subtotal;
 
         state.loading = false;
-        updateCart(state);
+        updateCart(state, action.payload.user);
       })
       .addCase(fetchCartDbData.rejected, (state, action) => {
         state.loading = false;
@@ -232,7 +249,6 @@ export const cartSlice = createSlice({
 });
 
 export const {
-  setCart,
   addToCart,
   removeCartItem,
   deleteCart,

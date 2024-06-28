@@ -53,6 +53,8 @@ export async function POST(request: NextRequest) {
     const savedUser = await user.save();
     const tokenData = {
       id: savedUser._id,
+      role: savedUser.role,
+
       username: savedUser.name,
       email: savedUser.email,
     };

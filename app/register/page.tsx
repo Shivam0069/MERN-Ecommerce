@@ -12,14 +12,16 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/firebase";
 import { uploadImage } from "@/helper/ImageUpload";
+import { useNewCartMutation } from "@/store/api/cartAPI";
 import { updateUser } from "@/store/slice/userSlice";
+import { RootState } from "@/store/store";
 import axios from "axios";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 interface FormData {
   _id: string;
   name: string;
@@ -33,6 +35,16 @@ interface FormData {
 
 export default function Register() {
   const dispatch = useDispatch();
+  const {
+    cartItems,
+    subtotal,
+    total,
+    tax,
+    discount,
+    shippingCharges,
+    shippingInfo,
+  } = useSelector((state: RootState) => state.cart);
+  const [newCart] = useNewCartMutation();
   const router = useRouter();
   const [gender, setGender] = useState<string>("");
   const [dob, setDob] = useState<string>("");
@@ -70,6 +82,7 @@ export default function Register() {
       toast.error("Please fill all the fields");
       return;
     }
+
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
@@ -83,13 +96,37 @@ export default function Register() {
         dob,
         type: "google",
       };
+
       console.log(googleAuthData);
+
       const response = await axios.post("/api/user/signup", googleAuthData);
+
       dispatch(updateUser(response.data.user));
+
+      const cartData = {
+        user: response?.data?.user?._id!,
+        cartItems,
+        tax,
+        total,
+        subtotal,
+        discount,
+        shippingCharges,
+        shippingInfo,
+      };
+
+      try {
+        const res = await axios.post("/api/cart/new", cartData);
+        console.log(res, "CartResponse");
+        toast.success("Cart Created");
+      } catch (cartError) {
+        console.log(cartError);
+        toast.error("Failed to create cart.");
+      }
+
       router.push("/");
-      console.log(response.data);
       toast.success("Sign Up Successful");
-    } catch (error) {
+    } catch (authError) {
+      console.log(authError);
       toast.error("Sign In Failed");
     }
   };
@@ -115,8 +152,9 @@ export default function Register() {
       const url = await uploadImage(photo, "images/users");
       if (!url) {
         toast.error("Error while uploading file");
+        return;
       }
-      setFormData((prev) => ({ ...prev, photo: url }));
+
       const data = {
         _id: formData._id,
         name: formData.name,
@@ -129,10 +167,33 @@ export default function Register() {
       };
 
       const response = await axios.post("/api/user/signup", data);
+
+      // Create cart for the user after successful signup
+      try {
+        const cartData = {
+          user: response.data.user._id,
+          cartItems,
+          tax,
+          total,
+          subtotal,
+          discount,
+          shippingCharges,
+          shippingInfo,
+        };
+
+        const cartResponse = await axios.post("/api/cart/new", cartData);
+        console.log(cartResponse, "CartResponse");
+        toast.success("Cart Created");
+      } catch (cartError) {
+        console.log(cartError);
+        toast.error("Failed to create cart.");
+      }
+
       dispatch(updateUser(response.data.user));
+
       router.push("/");
       console.log(response.data);
-      toast.success("Registered Successful");
+      toast.success("Registration Successful");
     } catch (error) {
       console.error(error);
       toast.error("Sign Up Failed");

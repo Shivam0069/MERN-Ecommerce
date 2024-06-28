@@ -1,13 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "./ui/button";
 import {
   addToCart,
-  calculatePrice,
   deleteCartItem,
   removeCartItem,
 } from "@/store/slice/cartSlice";
-import toast from "react-hot-toast";
 import { RootState } from "@/store/store";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "./ui/button";
 type CartItemProps = {
   cartItem: any;
 };
@@ -19,11 +18,14 @@ export default function CartItem({ cartItem }: CartItemProps) {
       return toast.error("Out of stock!");
     dispatch(
       addToCart({
-        ...cartItem,
-        quantity: cartItem.quantity + 1,
+        cartItem: {
+          ...cartItem,
+          quantity: cartItem.quantity + 1,
+        },
+        user: user?._id,
       })
     );
-    dispatch(calculatePrice({ user: user?._id! }));
+
     toast.success("Product added to cart");
   };
 
@@ -45,8 +47,12 @@ export default function CartItem({ cartItem }: CartItemProps) {
           variant="outline"
           size="icon"
           onClick={() => {
-            dispatch(removeCartItem(cartItem.productId));
-            dispatch(calculatePrice({ user: user?._id! }));
+            dispatch(
+              removeCartItem({
+                productId: cartItem.productId,
+                user: user?._id,
+              })
+            );
           }}
         >
           <MinusIcon className="w-4 h-4" />
@@ -63,8 +69,12 @@ export default function CartItem({ cartItem }: CartItemProps) {
           size="icon"
           className="ml-4"
           onClick={() => {
-            dispatch(deleteCartItem(cartItem.productId));
-            dispatch(calculatePrice({ user: user?._id! }));
+            dispatch(
+              deleteCartItem({
+                productId: cartItem.productId,
+                user: user?._id,
+              })
+            );
           }}
         >
           <TrashIcon className="w-4 h-4" />
