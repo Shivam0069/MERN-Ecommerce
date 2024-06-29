@@ -149,8 +149,14 @@ const calculatePriceOfCart = (
   state.tax = Math.round(state.subtotal * 0.18);
   state.shippingCharges = subtotal === 0 ? 0 : subtotal < 2000 ? 200 : 0;
 
-  state.total =
-    state.subtotal + state.tax + state.shippingCharges - state.discount;
+  let total = state.subtotal + state.tax + state.shippingCharges;
+  if (total > state.discount + 1000) {
+    total = total - state.discount;
+  } else {
+    state.discount = 0;
+  }
+  state.total = total;
+
   saveCartData(state, user);
   updateCart(state, user);
 };
