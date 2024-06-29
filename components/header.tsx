@@ -53,6 +53,8 @@ export default function Header() {
         toast.error("Logout failed");
       }
     } catch (error) {
+      console.log(error);
+
       toast.error("Logout failed");
     }
   };

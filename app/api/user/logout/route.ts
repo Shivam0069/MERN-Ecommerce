@@ -1,10 +1,8 @@
-import { connect } from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
-
-connect();
 
 export async function GET(request: NextRequest) {
   try {
+    // Set the token cookie to expire in the past
     const response = NextResponse.json({
       message: "Logged out successfully",
       success: true,
@@ -17,6 +15,12 @@ export async function GET(request: NextRequest) {
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
       sameSite: "strict", // Adjust SameSite attribute if necessary
     });
+
+    // Check if the token is still present in the request cookies
+    const token = request.cookies.get("token")?.value || "";
+    if (token) {
+      throw new Error("Token was not deleted");
+    }
 
     return response;
   } catch (error: any) {
