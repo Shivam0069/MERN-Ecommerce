@@ -1,27 +1,23 @@
-import { NextRequest, NextResponse } from "next/server";
-import User from "@/models/user";
 import { connect } from "@/dbConfig/dbConfig";
+import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
+
 connect();
 
 export async function AdminOnly(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    console.log("Full Request URL:", request.url);
-    console.log("Extracted User ID:", id);
-    console.log("Search Params", searchParams);
-    if (!id) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "User ID is required",
-        },
-        { status: 400 }
-      );
+    const token = request.cookies.get("token")?.value || "";
+    if (!token) {
+      throw new Error("Token not found in request cookies");
     }
-    // Fetch the user from the database
-    const user = await User.findById(id);
-    if (!user) {
+
+    const secret = process.env.TOKEN_SECRET;
+    if (!secret) {
+      throw new Error("TOKEN_SECRET environment variable is not set");
+    }
+
+    const decodedToken: any = jwt.verify(token, secret);
+    if (!decodedToken.id) {
       return NextResponse.json(
         {
           success: false,
@@ -30,9 +26,7 @@ export async function AdminOnly(request: NextRequest) {
         { status: 404 }
       );
     }
-
-    // Check if the user's role is admin
-    if (user.role !== "admin") {
+    if (decodedToken.role !== "admin") {
       return NextResponse.json(
         {
           success: false,
@@ -41,8 +35,6 @@ export async function AdminOnly(request: NextRequest) {
         { status: 403 }
       );
     }
-
-    // If the user is an admin, proceed to the next handler
     return NextResponse.next();
   } catch (error: any) {
     return NextResponse.json(
