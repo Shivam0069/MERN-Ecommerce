@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import "../../../globals.css";
 
 const TransactionManagement = ({ params }: { params: { id: string } }) => {
   const { id } = params;

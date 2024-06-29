@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { CircleLoader } from "@/helper/loader";
 import { createLastSixMonthsArray } from "@/helper/monthArray";
+import "../../globals.css";
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
 

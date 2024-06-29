@@ -17,6 +17,7 @@ import {
 } from "react-icons/ri";
 import Link from "next/link";
 import { IconType } from "react-icons";
+import "../../app/globals.css";
 
 const AdminSidebar = () => {
   const [showModal, setShowModal] = useState<boolean>(false);

@@ -11,7 +11,7 @@ import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Column } from "react-table";
-
+import "../../globals.css";
 interface DataType {
   user: string;
   amount: number;

@@ -130,7 +130,7 @@
   scrollbar-width: none; /* Firefox */
 }
 
-@layer components {
+@layer base {
   .dashboard {
     @apply overflow-y-auto scrollbar-hide;
 

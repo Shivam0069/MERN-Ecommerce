@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import "../../../globals.css";
 
 const NewProduct = () => {
   const [name, setName] = useState<string>("");

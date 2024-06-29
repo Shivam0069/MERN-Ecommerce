@@ -19,7 +19,7 @@ import {
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
-
+import "../../../globals.css";
 const Productmanagement = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const userData = useSelector((state: any) => state.user.userData);
