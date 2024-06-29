@@ -130,526 +130,914 @@
   scrollbar-width: none; /* Firefox */
 }
 
-@layer base {
-  .dashboard {
-    @apply overflow-y-auto scrollbar-hide;
+a {
+  text-decoration: none;
+  color: black;
+}
 
-    .bar {
-      @apply h-16 flex items-center px-4 border-b border-gray-400;
-      input {
-        @apply mr-auto w-full p-4 bg-inherit border-none outline-none;
-      }
-      svg {
-        @apply text-lg opacity-70;
-      }
-      img {
-        @apply w-8 h-8 rounded-full;
-      }
-    }
+.red {
+  color: #ef4444;
+}
 
-    .widget-container {
-      @apply flex justify-between items-stretch gap-8 py-8 pr-8;
+.purple {
+  color: #8b5cf6;
+}
 
-      .widget {
-        @apply w-[240px] bg-white shadow-lg py-8 px-6 rounded-lg flex justify-between items-stretch gap-0;
+.green {
+  color: #10b981;
+}
 
-        .widget-info {
-          p {
-            @apply opacity-70 text-sm;
-          }
-          h4 {
-            @apply text-2xl;
-          }
-          span {
-            @apply flex items-center gap-1;
-          }
-        }
+/* Admin container */
+.admin-container {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 8px;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+  height: calc(100vh - 41px);
+}
 
-        .widget-circle {
-          @apply relative w-20 h-20 rounded-full flex-none grid place-items-center bg-[#253c48];
-          &::before {
-            @apply absolute w-16 h-16 bg-white rounded-full;
-          }
-          span {
-            @apply relative;
-          }
-        }
-      }
-    }
+.admin-container aside {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 16px;
+  z-index: 10;
+  overflow-y: auto;
+}
 
-    .graph-container {
-      @apply flex items-stretch gap-8 p-0 pr-8;
-      div {
-        @apply bg-white rounded-lg;
-      }
+.admin-container aside::-webkit-scrollbar {
+  display: none;
+}
 
-      .revenue-chart {
-        @apply w-full p-8;
+.admin-container aside > div {
+  margin: 8px;
+}
 
-        h2 {
-          @apply tracking-tight font-light uppercase my-4 text-center;
-        }
-      }
+.admin-container aside > div h5 {
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  opacity: 0.8;
+  margin-top: 16px;
+}
 
-      .dashboard-categories {
-        @apply w-full max-w-xs flex flex-col items-center gap-0 pb-8;
-        h2 {
-          @apply tracking-tight font-light uppercase my-6 text-center;
-        }
+.admin-container aside > div ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  list-style-type: none;
+}
 
-        div {
-          @apply overflow-y-auto max-h-[640px]   scrollbar-hide;
-        }
+.admin-container aside > div ul li {
+  padding: 10px;
+  border-radius: 8px;
+}
 
-        .category-item {
-          @apply flex justify-between items-center py-4 px-2;
-          h5 {
-            @apply tracking-wide font-light;
-          }
-          div {
-            @apply ml-auto w-24 bg-gray-300 rounded-lg h-2 flex-none;
-            div {
-              @apply rounded-lg h-full;
-            }
-          }
-          span {
-            @apply text-sm font-bold;
-          }
-        }
-      }
-    }
+.admin-container aside > div ul li a {
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+}
 
-    .transaction-container {
-      @apply flex gap-4 p-0 pr-8 max-h-[480px];
+/* dashboard */
+.dashboard {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
 
-      div {
-        @apply bg-white shadow-lg rounded-lg;
-      }
-      .gender-chart {
-        @apply w-full max-w-xs p-4 relative;
-        h2 {
-          @apply tracking-tight font-light uppercase my-6 text-center;
-        }
-        p {
-          @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-gray-400;
-        }
-      }
+.dashboard::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 
-      .transaction-box {
-        @apply w-full px-4 overflow-x-auto;
-        h2 {
-          @apply my-6 tracking-tight font-light uppercase;
-        }
-      }
-    }
+.dashboard .bar {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.dashboard .bar input {
+  margin-right: auto;
+  width: 100%;
+  padding: 1rem;
+  background-color: inherit;
+  border: none;
+  outline: none;
+}
+
+.dashboard .bar svg {
+  font-size: 1.25rem;
+  opacity: 0.7;
+}
+
+.dashboard .bar img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.dashboard .widget-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 2rem;
+  padding: 1rem;
+  padding-right: 2rem;
+}
+
+.dashboard .widget {
+  width: 240px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 0;
+}
+
+.dashboard .widget .widget-info p {
+  opacity: 0.7;
+  font-size: 0.875rem;
+}
+
+.dashboard .widget .widget-info h4 {
+  font-size: 1.5rem;
+}
+
+.dashboard .widget .widget-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dashboard .widget .widget-circle {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background-color: #253c48;
+}
+
+.dashboard .widget .widget-circle::before {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.dashboard .widget .widget-circle span {
+  position: relative;
+}
+
+.dashboard .graph-container {
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+  padding: 0;
+  padding-right: 2rem;
+}
+
+.dashboard .graph-container > div {
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+.dashboard .graph-container .revenue-chart {
+  width: 100%;
+  padding: 2rem;
+}
+
+.dashboard .graph-container .revenue-chart h2 {
+  letter-spacing: 0.05em;
+  font-weight: lighter;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.dashboard .graph-container .dashboard-categories {
+  width: 100%;
+  max-width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding-bottom: 1rem;
+}
+
+.dashboard .graph-container .dashboard-categories h2 {
+  letter-spacing: 0.05em;
+  font-weight: lighter;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.dashboard .graph-container .dashboard-categories > div {
+  overflow-y: auto;
+  max-height: 40rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dashboard .graph-container .dashboard-categories > div::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.dashboard .graph-container .dashboard-categories .category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.dashboard .graph-container .dashboard-categories .category-item h5 {
+  letter-spacing: 0.1em;
+  font-weight: lighter;
+}
+
+.dashboard .graph-container .dashboard-categories .category-item > div {
+  margin-left: auto;
+  width: 5rem;
+  background-color: #ccc;
+  border-radius: 0.25rem;
+  height: 0.5rem;
+  flex: none;
+}
+
+.dashboard .graph-container .dashboard-categories .category-item > div > div {
+  border-radius: 0.25rem;
+  height: 100%;
+}
+
+.dashboard .graph-container .dashboard-categories .category-item span {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.dashboard .transaction-container {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  padding-right: 2rem;
+  max-height: 30rem;
+}
+
+.dashboard .transaction-container > div {
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dashboard .transaction-container .gender-chart {
+  width: 100%;
+  max-width: 12rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.dashboard .transaction-container .gender-chart h2 {
+  letter-spacing: 0.05em;
+  font-weight: lighter;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.dashboard .transaction-container .gender-chart p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  color: #ccc;
+}
+
+.dashboard .transaction-container .transaction-box {
+  width: 100%;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.dashboard .transaction-container .transaction-box h2 {
+  margin-top: 1.5rem;
+  letter-spacing: 0.05em;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
+
+/* Table styles */
+.table {
+  display: table;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  padding: 4px;
+  text-align: center;
+}
+
+.table th {
+  font-weight: 600;
+  color: #374151;
+  padding: 32px;
+}
+
+.table tbody tr {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.table tbody td {
+  padding: 16px;
+  text-align: center;
+}
+
+.table tbody td img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.table tbody td a {
+  background-color: #bfdbfe;
+  color: #1e40af;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.table tbody td button {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #ef4444;
+}
+
+.table tbody td:first-child {
+  border-left: none;
+}
+
+.table tbody td:last-child {
+  border-right: none;
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+}
+
+.table-pagination button {
+  padding: 16px 32px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.table-pagination button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+#hamburger {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #2563eb;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+#close-sidebar {
+  width: 80%;
+  margin: 16px;
+  display: block;
+  padding: 12px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #ef4444;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.loader div {
+  width: 10rem;
+  height: 10rem;
+  border: 8px solid transparent;
+  border-top-color: #1f2937;
+  border-bottom-color: #ffffff;
+  border-radius: 50%;
+  animation: loading-animation 1s linear infinite;
+}
+
+@keyframes loading-animation {
+  to {
+    transform: rotate(360deg);
   }
-  /* app.scss translated to Tailwind CSS classes */
+}
 
-  /* Global styles */
-  :root {
-    @apply font-sans;
-  }
+.dashboard-product-box {
+  background-color: #ffffff;
+  padding: 32px;
+  overflow-y: auto;
+  width: 100%;
+  max-height: calc(100vh - 41px);
+}
 
-  * {
-    @apply m-0 p-0 box-border;
-  }
+.create-product-btn {
+  position: fixed;
+  right: 3rem;
+  top: 4rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 1;
+}
 
-  a {
-    @apply no-underline text-black;
-  }
+.product-delete-btn {
+  background-color: #4b5563;
+  color: #ffffff;
+  font-size: 1.25rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
 
-  .red {
-    @apply text-red-500;
-  }
-  .purple {
-    @apply text-purple-500;
-  }
-  .green {
-    @apply text-green-500;
-  }
+.product-management {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
 
-  /* Admin container */
+.product-management > section {
+  overflow-y: auto;
+  width: 100%;
+  height: 85vh;
+  max-width: 450px;
+  background-color: #ffffff;
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  border-radius: 8px;
+}
+
+.product-management > section h2 {
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  text-align: center;
+}
+
+.product-management > section img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.product-management > section strong {
+  font-weight: 300;
+}
+
+.product-management > section span {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+}
+
+.product-management > section p {
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.product-management > section h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.product-management > article {
+  height: 85vh;
+  padding: 32px;
+  width: 100%;
+  max-width: 450px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-management > article > form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.product-management > article > form h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.product-management > article > form img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-management > article > form > div {
+  width: 100%;
+  position: relative;
+}
+
+.product-management > article > form > div label {
+  position: absolute;
+  left: 0;
+  top: -1.5rem;
+}
+
+.product-management > article > form > div input {
+  width: 100%;
+  padding: 16px;
+  background-color: inherit;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+}
+
+.product-management > article > form > button {
+  padding: 16px;
+  border: none;
+  background-color: #2563eb;
+  color: #ffffff;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.product-management .shipping-info-card {
+  text-align: center;
+}
+
+.product-management .shipping-info-card h1 {
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.product-management .shipping-info-card h5 {
+  margin-top: 16px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.product-management .shipping-info-card p {
+  margin: 8px;
+}
+
+.product-management .shipping-info-card .shipping-btn {
+  padding: 16px;
+  border: none;
+  background-color: #2563eb;
+  color: #ffffff;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.transaction-product-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.transaction-product-card img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.transaction-product-card span {
+  margin-left: auto;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1200px) {
   .admin-container {
-    @apply grid grid-cols-[1fr,4fr] gap-8 py-4 px-2 scrollbar-hide bg-gray-100 h-[calc(100vh-41px)];
-    aside {
-      @apply w-full bg-white p-4 z-10 overflow-y-auto;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
-      div {
-        @apply m-8;
-        h5 {
-          @apply tracking-tight font-light uppercase opacity-80 my-4;
-        }
-        ul {
-          @apply flex flex-col gap-2.5 list-none;
-          li {
-            @apply p-2.5 rounded-lg;
-            a {
-              @apply text-gray-800 flex items-center;
-            }
-          }
-        }
-      }
-    }
+    overflow-y: auto;
   }
 
-  /* Table styles */
-  .table {
-    @apply table-fixed w-full;
-    th,
-    td {
-      @apply p-1 text-center;
-    }
-
-    th {
-      @apply font-semibold text-gray-800 text-lg  p-8;
-    }
-
-    tbody {
-      tr {
-        @apply shadow-sm;
-      }
-
-      td {
-        @apply p-4 text-center;
-
-        img {
-          @apply w-16 h-16 object-contain rounded-lg mx-auto;
-        }
-        a {
-          @apply no-underline bg-blue-100 text-blue-500 px-2 py-1 rounded-lg;
-        }
-        button {
-          @apply w-8 h-8 text-lg border-none outline-none bg-transparent cursor-pointer text-red-500 hover:opacity-60;
-        }
-
-        &:first-child {
-          @apply border-l-0;
-        }
-
-        &:last-child {
-          @apply border-r-0;
-        }
-      }
-    }
+  .dashboard .widget-container,
+  .dashboard .graph-container,
+  .dashboard .transaction-container {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  .table-pagination {
-    @apply flex justify-center items-center gap-4 p-8;
-    button {
-      @apply px-4 py-2 border-none outline-none rounded-lg cursor-pointer bg-blue-600 text-white disabled:bg-blue-200 disabled:cursor-not-allowed;
-    }
+  .dashboard .graph-container {
+    padding: 32px;
   }
 
-  #hamburger {
-    @apply grid place-items-center w-12 h-12 border-none outline-none cursor-pointer text-blue-500 fixed top-4 left-4 text-2xl bg-white rounded-full z-10;
+  .dashboard .transaction-container {
+    padding: 32px;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .admin-container {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cart {
+    display: block;
+    padding: 32px;
   }
 
-  #close-sidebar {
-    @apply w-4/5 m-4 block py-3 border-none outline-none cursor-pointer bg-red-600 text-white rounded-lg;
+  .cart main {
+    width: 100%;
   }
 
-  .loader {
-    @apply w-full h-screen flex justify-center items-center;
-    div {
-      @apply w-40 h-40 border-8 border-t-8 border-t-transparent border-l-gray-800 border-r-white border-b-white rounded-full animate-spin;
-    }
+  .cart aside {
+    width: 100%;
   }
 
-  @keyframes loading-animation {
-    to {
-      transform: rotateZ(360deg);
-    }
+  .cartitem img {
+    width: 3rem;
+    height: 3rem;
   }
-  .dashboard-product-box {
-    @apply bg-white p-8 overflow-y-auto w-full max-h-[calc(100vh-41px)] scrollbar-hide;
+
+  .cartitem > div {
+    flex-direction: column;
+    gap: 0;
   }
-  .create-product-btn {
-    @apply fixed right-14 top-16 w-10 h-10 flex justify-center items-center rounded-full bg-red-600 text-white hover:opacity-80;
+
+  .product-search-page {
+    display: block;
+    padding: 0;
   }
-  .product-delete-btn {
-    @apply bg-gray-800 text-white text-xl w-10 h-10 flex justify-center items-center rounded-full cursor-pointer border-none absolute top-1 right-1;
+
+  .product-search-page aside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: none;
   }
+
+  .product-search-page aside h2 {
+    letter-spacing: 0.05em;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 1.125rem;
+  }
+
+  .product-search-page main input {
+    width: 100%;
+    border: 1px solid #d1d5db;
+  }
+}
+
+@media screen and (max-width: 600px) {
   .product-management {
-    @apply flex flex-row justify-center items-center p-16;
-
-    > section {
-      @apply overflow-y-auto w-full h-[85vh] max-w-[450px] shadow-md bg-white p-20 flex flex-col gap-4 relative rounded-lg scrollbar-hide;
-      h2 {
-        @apply tracking-tight font-light uppercase text-center;
-      }
-      img {
-        @apply w-full h-full object-contain;
-      }
-      strong {
-        @apply font-light;
-      }
-      span {
-        @apply absolute right-8 top-8;
-      }
-      p {
-        @apply text-center tracking-wide uppercase;
-      }
-      h3 {
-        @apply text-center text-2xl;
-      }
-    }
-
-    > article {
-      @apply h-[85vh] p-8 w-full max-w-[450px] bg-white rounded-lg shadow-lg relative;
-
-      > form {
-        @apply flex flex-col items-center gap-8;
-        h2 {
-          @apply uppercase tracking-wide;
-        }
-        img {
-          @apply w-20 h-20 object-cover rounded-lg;
-        }
-        div {
-          @apply w-full relative;
-          label {
-            @apply absolute left-0 top-[-1.5rem];
-          }
-          input {
-            @apply w-full p-4 bg-inherit border border-gray-300 rounded-lg outline-none;
-          }
-        }
-        button {
-          @apply p-4 border-none bg-blue-700 text-white w-full rounded-lg text-lg cursor-pointer;
-        }
-      }
-    }
-
-    .shipping-info-card {
-      h1 {
-        @apply text-center tracking-tight font-light uppercase;
-      }
-      h5 {
-        @apply mt-8 text-lg font-bold;
-      }
-      p {
-        @apply m-2;
-      }
-      .shipping-btn {
-        @apply my-8 p-4 border-none bg-blue-700 text-white w-full rounded-lg text-lg cursor-pointer hover:opacity-80;
-      }
-    }
-  }
-  .transaction-product-card {
-    @apply flex items-center gap-4;
-
-    img {
-      @apply w-16 h-16 object-cover rounded-lg;
-    }
-    span {
-      @apply ml-auto;
-    }
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
   }
 
-  /* Tailwind CSS with @apply for Responsive Styles */
-
-  @media screen and (max-width: 1200px) {
-    .admin-container {
-      @apply overflow-auto;
-    }
-
-    .dashboard {
-      .widget-container,
-      .graph-container,
-      .transaction-container {
-        @apply justify-center flex-wrap;
-      }
-      .graph-container {
-        @apply p-8;
-      }
-      .transaction-container {
-        @apply p-8 h-auto;
-      }
-    }
-
-    .product-management {
-      @apply p-8;
-    }
+  .product-management > section {
+    max-width: none;
   }
-
-  @media screen and (max-width: 1100px) {
-    .admin-container {
-      @apply grid-cols-1 !important;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .cart {
-      @apply block p-8;
-
-      > main {
-        @apply w-full;
-      }
-      > aside {
-        @apply w-full;
-      }
-    }
-
-    .cartitem {
-      @apply w-full;
-
-      > img {
-        @apply w-12 h-12;
-      }
-      > div {
-        @apply flex-col gap-0;
-      }
-    }
-
-    .product-search-page {
-      @apply block p-0;
-
-      > aside {
-        @apply flex justify-between items-center flex-wrap shadow-none;
-
-        > h2 {
-          @apply tracking-tight font-light uppercase text-lg;
-        }
-      }
-
-      > main > input {
-        @apply w-full border border-gray-300;
-      }
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .product-management {
-      @apply flex-col items-center p-0;
-
-      > section {
-        @apply max-w-sm;
-      }
-    }
-
-    .chart-container {
-      @apply p-0 scrollbar-hide;
-
-      > h1 {
-        @apply m-0 text-center;
-      }
-
-      > section {
-        @apply my-32;
-      }
-    }
-
-    .dashboard-app-container > section {
-      .coupon-form,
-      .stopwatch {
-        @apply flex flex-col;
-      }
-
-      .stopwatch {
-        @apply items-center;
-      }
-    }
-  }
-
-  /* Tailwind CSS with @apply for .dashboard-app-container */
-
-  .dashboard-app-container {
-    @apply bg-white p-16;
-
-    > section {
-      @apply flex flex-col items-center justify-center gap-8 h-full;
-
-      .stopwatch {
-        > h2 {
-          @apply text-2xl font-light text-center;
-        }
-
-        > button {
-          @apply p-4 border-none cursor-pointer text-white m-8 font-bold rounded-lg;
-
-          &:first-of-type {
-            @apply bg-blue-600;
-          }
-
-          &:last-of-type {
-            @apply bg-red-600;
-          }
-        }
-      }
-
-      .tosscoin {
-        @apply m-8 relative cursor-pointer transform-none transition-all duration-500 w-60 h-60;
-
-        > div {
-          @apply rounded-full absolute grid place-items-center bg-no-repeat bg-contain drop-shadow-lg w-full h-full;
-          background-size: contain;
-        }
-      }
-
-      .coupon-form {
-        @apply grid grid-cols-[2fr,1fr] gap-8 max-w-md w-full;
-
-        > input {
-          @apply p-4 border border-gray-300 outline-none rounded-lg;
-        }
-
-        > fieldset {
-          @apply p-4 border border-gray-300 rounded-lg flex items-center justify-center gap-0 flex-wrap col-span-2;
-
-          span {
-            @apply text-xs font-light ml-1 mr-4;
-          }
-        }
-
-        > button {
-          @apply font-bold text-lg w-full p-4 border-none text-white cursor-pointer my-8 rounded-lg col-span-2 bg-blue-600;
-        }
-      }
-
-      > code {
-        @apply relative text-lg tracking-wider cursor-pointer;
-
-        &:hover > span {
-          @apply opacity-100;
-        }
-
-        > span {
-          @apply opacity-0 absolute w-full h-full top-0 left-0 rounded-lg bg-gray-900 text-white text-xs flex items-center justify-center;
-        }
-      }
-    }
-  }
-
-  /* Tailwind CSS with @apply for .chart-container */
 
   .chart-container {
-    @apply bg-white p-16 overflow-y-auto;
-
-    > h1 {
-      @apply mb-20 ml-8;
-    }
-
-    > section {
-      @apply w-80 mx-auto my-16;
-
-      > div {
-        @apply max-w-[25rem] mx-auto mt-24 mb-[1rem];
-      }
-
-      > h2 {
-        @apply mt-8 text-center;
-      }
-    }
+    padding: 0;
+    overflow-y: hidden;
   }
 
-  .perspective {
-    perspective: 1000px;
+  .chart-container h1 {
+    margin-bottom: 20px;
+    margin-left: 16px;
   }
 
-  .backface-hidden {
-    backface-visibility: hidden;
+  .chart-container > section {
+    width: 80%;
+    margin: auto;
+    margin-top: 24px;
+    margin-bottom: 1rem;
+    max-width: 25rem;
   }
+}
+
+/* Additional Tailwind CSS classes translated to pure CSS */
+.dashboard-app-container {
+  background-color: #ffffff;
+  padding: 64px;
+}
+
+.dashboard-app-container > section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.dashboard-app-container .stopwatch h2 {
+  font-size: 2rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+.dashboard-app-container .stopwatch > button {
+  padding: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.dashboard-app-container .stopwatch > button:first-of-type {
+  background-color: #2563eb;
+}
+
+.dashboard-app-container .stopwatch > button:last-of-type {
+  background-color: #ef4444;
+}
+
+.dashboard-app-container .tosscoin {
+  margin: 16px;
+  position: relative;
+  transform: none;
+  transition: all 0.5s;
+  width: 15rem;
+  height: 15rem;
+}
+
+.dashboard-app-container .tosscoin > div {
+  border-radius: 50%;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard-app-container .coupon-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  max-width: 25rem;
+  width: 100%;
+}
+
+.dashboard-app-container .coupon-form > input {
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  border-radius: 8px;
+}
+
+.dashboard-app-container .coupon-form > fieldset {
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.dashboard-app-container .coupon-form > fieldset span {
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin-left: 1px;
+}
+
+.dashboard-app-container .coupon-form > button {
+  font-weight: bold;
+  font-size: 1.25rem;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: #2563eb;
+}
+
+.dashboard-app-container code {
+  position: relative;
+  font-size: 1.125rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.dashboard-app-container code:hover > span {
+  opacity: 1;
+}
+
+.dashboard-app-container code > span {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+  background-color: #1f2937;
+  color: #ffffff;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-container {
+  background-color: #ffffff;
+  padding: 64px;
+  overflow-y: auto;
+}
+
+.chart-container h1 {
+  margin-bottom: 20px;
+  margin-left: 64px;
+}
+
+.chart-container > section {
+  width: 80%;
+  margin: auto;
+  margin-top: 64px;
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
 }

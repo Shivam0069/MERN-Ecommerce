@@ -81,7 +81,8 @@ const Dashboard = () => {
                 bgColor_2=""
                 labels={sixMonths}
               />
-              <h2>Transaction</h2>
+              <div className="w-full h-0.5 bg-black mt-4"></div>
+              <h2 className="!text-black">Transaction</h2>
               <BarChart
                 data_1={data?.stats.chart.order || []}
                 data_2={[]}
@@ -93,7 +94,7 @@ const Dashboard = () => {
               />
             </div>
 
-            <div className="dashboard-categories">
+            <div className="dashboard-categories ">
               <h2>Inventory</h2>
 
               <div>
@@ -113,8 +114,9 @@ const Dashboard = () => {
           </section>
 
           <section className="transaction-container mt-2">
-            <div className="gender-chart">
-              <h2>Gender Ratio</h2>
+            <div className="py-3">
+              <h2 className="text-center mb-2 ">Gender Ratio</h2>
+
               <DoughnutChart
                 labels={["Female", "Male"]}
                 data={[
@@ -127,8 +129,9 @@ const Dashboard = () => {
                 ]}
                 cutout={90}
               />
-              <p>
-                <BiMaleFemale />
+
+              <p className="">
+                <BiMaleFemale className="mx-auto h-6 w-6" />
               </p>
             </div>
             <Table
@@ -209,8 +212,8 @@ interface CategoryItemProps {
 }
 
 const CategoryItem = ({ color, value, heading }: CategoryItemProps) => (
-  <div className="category-item">
-    <h5>{heading}</h5>
+  <div className="category-item  !justify-center !px-0 ">
+    <h5 className="!text-xs !text-black !font-medium capitalize">{heading}</h5>
     <div>
       <div
         style={{
@@ -219,7 +222,7 @@ const CategoryItem = ({ color, value, heading }: CategoryItemProps) => (
         }}
       ></div>
     </div>
-    <span>{value}%</span>
+    <span className="!text-xs">{value}%</span>
   </div>
 );
 

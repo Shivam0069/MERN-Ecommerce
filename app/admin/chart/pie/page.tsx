@@ -36,8 +36,8 @@ const PieCharts = () => {
       <main className="chart-container scrollbar-hide">
         <h1>Pie & Doughnut Charts</h1>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <PieChart
               labels={["Processing", "Shipped", "Delivered"]}
               data={[
@@ -56,8 +56,8 @@ const PieCharts = () => {
           <h2>Order Fulfillment Ratio</h2>
         </section>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <DoughnutChart
               labels={labels}
               data={values}
@@ -69,8 +69,8 @@ const PieCharts = () => {
           <h2>Product Categories Ratio</h2>
         </section>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <DoughnutChart
               labels={["In Stock", "Out Of Stock"]}
               data={[
@@ -86,8 +86,8 @@ const PieCharts = () => {
           <h2> Stock Availability</h2>
         </section>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <DoughnutChart
               labels={[
                 "Marketing Cost",
@@ -117,8 +117,8 @@ const PieCharts = () => {
           <h2>Revenue Distribution</h2>
         </section>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <PieChart
               labels={[
                 "Teenager(Below 20)",
@@ -141,8 +141,8 @@ const PieCharts = () => {
           <h2>Users Age Group</h2>
         </section>
 
-        <section>
-          <div>
+        <section className="w-full flex flex-col items-center ">
+          <div className="w-80 h-80">
             <DoughnutChart
               labels={["Admin", "Customers"]}
               data={[
