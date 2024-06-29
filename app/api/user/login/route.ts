@@ -56,9 +56,9 @@ export async function POST(request: NextRequest) {
 
     response.cookies.set("token", token, {
       httpOnly: true,
-    });
-    response.cookies.set("role", user.role, {
-      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: "strict", // Adjust as necessary
+      path: "/", // Root path
     });
 
     return response;

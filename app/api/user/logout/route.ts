@@ -13,6 +13,9 @@ export async function GET(request: NextRequest) {
     response.cookies.set("token", "", {
       httpOnly: true,
       expires: new Date(0),
+      path: "/", // Make sure the path matches where the cookie was originally set
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "strict", // Adjust SameSite attribute if necessary
     });
 
     return response;

@@ -59,8 +59,7 @@ export async function POST(request: NextRequest) {
       email: savedUser.email,
     };
 
-    const tokenSecret =
-      process.env.TOKEN_SECRET || "abcdefghijklmnopqrstuvwxyz";
+    const tokenSecret = process.env.TOKEN_SECRET!;
 
     const token = jwt.sign(tokenData, tokenSecret, {
       expiresIn: "1d",
@@ -78,9 +77,9 @@ export async function POST(request: NextRequest) {
 
     response.cookies.set("token", token, {
       httpOnly: true,
-    });
-    response.cookies.set("role", savedUser.role, {
-      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: "strict", // Adjust as necessary
+      path: "/", // Root path
     });
 
     return response;
