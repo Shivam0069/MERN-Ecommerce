@@ -44,7 +44,7 @@ export default function Header() {
         `${process.env.NEXT_PUBLIC_DOMAIN}/api/user/logout`
       );
       if (res.data.success) {
-        console.log("logged Out");
+        console.log("logged Out", res.data);
         dispatch(deleteCart());
         dispatch(setUserNull());
         toast.success("Logout successfully");
