@@ -7,7 +7,9 @@ export async function AdminOnly(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
-
+    console.log("Full Request URL:", request.url);
+    console.log("Extracted User ID:", id);
+    console.log("Search Params", searchParams);
     if (!id) {
       return NextResponse.json(
         {
