@@ -50,7 +50,9 @@ export default function Header() {
         toast.success("Logout successfully");
         router.push("/");
       } else {
-        toast.error("Logout failed");
+        console.log("logged Out", res.data);
+
+        toast.error("Logout failed!!");
       }
     } catch (error) {
       console.log(error);
