@@ -101,9 +101,20 @@ export default function Header() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => router.push("/profile")}>
-                My Account
-              </DropdownMenuItem>
+              {user?._id && (
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  My Account
+                </DropdownMenuItem>
+              )}
+
+              {user?.role === "admin" && (
+                <DropdownMenuItem
+                  onClick={() => router.push("/admin/dashboard")}
+                >
+                  Admin
+                </DropdownMenuItem>
+              )}
+
               <DropdownMenuItem onClick={() => router.push("/orders")}>
                 Orders
               </DropdownMenuItem>

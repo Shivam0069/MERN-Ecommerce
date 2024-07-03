@@ -4,35 +4,61 @@ import { CircleLoader } from "@/helper/loader";
 import { useMyOrdersQuery } from "@/store/api/orderAPI";
 import { RootState } from "@/store/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 
 export default function Component() {
   const { userData } = useSelector((state: RootState) => state.user);
   const { data, isLoading } = useMyOrdersQuery(userData?._id!);
   console.log(data, "myOrders");
+  const router = useRouter();
+  return isLoading ? (
+    <div className="w-screen flex justify-center items-center h-[calc(100vh-41px)]">
+      <CircleLoader />
+    </div>
+  ) : (
+    <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)] max-w-7xl mx-auto mt-10">
+      <h2 className="text-lg font-semibold mb-4">Orders</h2>
+      <div className="grid gap-4">
+        {data?.orders.map((item, idx) => (
+          <div
+            onClick={() => router.push(`/order/${item._id}`)}
+            key={idx}
+            className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
+          >
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
+                <div>Order #{item._id.slice(0, 5)}... </div>
+                <div>{item.createdAt?.split("T")[0]}</div>
+              </div>
 
-  return (
-    <div className="bg-white dark:bg-gray-950 rounded-lg shadow-lg p-6  ">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">My Orders</h1>
-        {/* <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search orders..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 dark:text-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div> */}
+              {item.orderItems.map((product, idx) => (
+                <div key={idx} className="flex items-center gap-4">
+                  <img
+                    src={product.photo}
+                    alt={product.name}
+                    width={64}
+                    height={64}
+                    className="rounded-md"
+                  />
+                  <div>
+                    <div className="font-medium">
+                      {product.name} x {product.quantity}
+                    </div>
+                  </div>
+                  <div className="w-0.5 h-14 border"></div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-right">
+              <div className="font-medium">&#8377;{item.total.toFixed(2)}</div>
+              <div className="text-sm text-muted-foreground">{item.status}</div>
+            </div>
+          </div>
+        ))}
       </div>
-      {isLoading ? (
-        <div className="w-screen flex justify-center items-center h-[calc(100vh-41px)]">
-          <CircleLoader />
-        </div>
-      ) : (
-        <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)]">
-          <table className="w-full table-auto">
+      {/* <table className="w-full table-auto">
             <thead className="bg-gray-100 dark:bg-gray-800">
               <tr>
                 <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
@@ -96,9 +122,7 @@ export default function Component() {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-      )}
+          </table> */}
     </div>
   );
 }

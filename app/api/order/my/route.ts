@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
     if (myCache.has(`my-orders-${id}`)) {
       orders = JSON.parse(myCache.get(`my-orders-${id}`) as string);
     } else {
-      orders = await Order.find({ user: id });
+      orders = await Order.find({ user: id }).sort({ createdAt: -1 });
+
       myCache.set(`my-orders-${id}`, JSON.stringify(orders));
     }
 
