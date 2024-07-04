@@ -1,5 +1,8 @@
 "use client";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Loader, { CircleLoader } from "@/helper/loader";
 import {
   useDeleteProductMutation,
@@ -9,15 +12,8 @@ import {
 import { CustomError } from "@/types/api-types";
 import { responseToast } from "@/utils/features";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  FormEvent,
-  ReactElement,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import "../../../globals.css";
 const Productmanagement = ({ params }: { params: { id: string } }) => {
@@ -72,10 +68,13 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
       };
     }
   };
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
 
+  const submitHandler = async () => {
     const formData = new FormData();
     let hasChanges = false;
 
@@ -131,78 +130,132 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
           <CircleLoader />
         </div>
       ) : (
-        <main className="product-management !py-0 !gap-2 ">
-          <section className="!max-h-[calc(100vh-85px)]  ">
-            <strong className="text-sm">ID - {id}</strong>
-            <img src={data?.product.photo} alt="Product" />
-            <p>{name}</p>
-            {data?.product.stock! > 0 ? (
-              <span className="green">{data?.product.stock} Available</span>
-            ) : (
-              <span className="red"> Not Available</span>
-            )}
-            <h3>₹{data?.product.price}</h3>
-          </section>
-          <article className="!py-4 !max-h-[calc(100vh-85px)] overflow-x-hidden !overflow-y-auto scrollbar-hide">
-            <button onClick={deleteHandler} className="product-delete-btn">
-              <FaTrash />
-            </button>
-            <form onSubmit={submitHandler} className=" ">
-              <h2>Manage</h2>
-              <div>
-                <label>Name</label>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={nameUpdate}
-                  onChange={(e) => setNameUpdate(e.target.value)}
-                />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-4 md:p-8 max-h-[calc(100vh-41px)] overflow-auto scrollbar-hide">
+          <div className="grid gap-4">
+            <img
+              src={data?.product.photo}
+              alt={data?.product.name}
+              width={600}
+              height={600}
+              className="w-full aspect-square object-cover rounded-lg"
+            />
+            <div className="grid gap-1">
+              <p className="text-sm text-muted-foreground">Product ID</p>
+              <p className="font-medium">{data?.product._id}</p>
+            </div>
+            <div className="grid gap-1">
+              <p className="text-sm text-muted-foreground">Name</p>
+              <p className="font-medium">{data?.product.name}</p>
+            </div>
+            <div className="grid gap-1">
+              <p className="text-sm text-muted-foreground">Price</p>
+              <p className="font-medium">&#8377;{data?.product.price}</p>
+            </div>
+          </div>
+          <div className="grid gap-6">
+            <div className="grid gap-3">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                defaultValue="Gamer Gear Pro Controller"
+                value={nameUpdate}
+                onChange={(e) => setNameUpdate(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                type="number"
+                defaultValue={99.99}
+                value={priceUpdate}
+                onChange={(e) => setPriceUpdate(Number(e.target.value))}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="stock">Stock</Label>
+              <Input
+                id="stock"
+                type="number"
+                defaultValue={100}
+                value={stockUpdate}
+                onChange={(e) => setStockUpdate(Number(e.target.value))}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="category">Category</Label>
+              <Input
+                id="category"
+                type="text"
+                placeholder="Game"
+                value={categoryUpdate}
+                onChange={(e) => setCategoryUpdate(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="photo">Photo</Label>
+              <div className="grid gap-2">
+                <div className="flex items-center gap-2">
+                  <Input
+                    ref={fileInputRef}
+                    id="photo"
+                    type="file"
+                    onChange={changeImageHandler}
+                  />
+                  <Button
+                    onClick={triggerFileInput}
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <UploadIcon className="w-5 h-5" />
+                  </Button>
+                </div>
+                {photoUpdate && (
+                  <div className="grid grid-cols-1">
+                    <img
+                      src={photoUpdate}
+                      alt="Product Image"
+                      className="w-44 mx-auto aspect-square object-cover rounded-lg"
+                    />
+                  </div>
+                )}
               </div>
-              <div>
-                <label>Price</label>
-                <input
-                  type="number"
-                  placeholder="Price"
-                  value={priceUpdate}
-                  onChange={(e) => setPriceUpdate(Number(e.target.value))}
-                />
-              </div>
-              <div>
-                <label>Stock</label>
-                <input
-                  type="number"
-                  placeholder="Stock"
-                  value={stockUpdate}
-                  onChange={(e) => setStockUpdate(Number(e.target.value))}
-                />
-              </div>
-
-              <div>
-                <label>Category</label>
-                <input
-                  type="text"
-                  placeholder="eg. laptop, camera etc"
-                  value={categoryUpdate}
-                  onChange={(e) => setCategoryUpdate(e.target.value)}
-                />
-              </div>
-
-              <div className="">
-                <label>Photo</label>
-                <input type="file" onChange={changeImageHandler} />
-              </div>
-
-              {photoUpdate && <img src={photoUpdate} alt="New Image" />}
-              <button type="submit">
-                {" "}
-                {isUpdating ? "Updating..." : "Update"}{" "}
-              </button>
-            </form>
-          </article>
-        </main>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button onClick={deleteHandler} variant="outline">
+                Delete
+              </Button>
+              <Button onClick={submitHandler}>
+                {isUpdating ? "Updating..." : "Update"}
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
 export default Productmanagement;
+
+function UploadIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="17 8 12 3 7 8" />
+      <line x1="12" x2="12" y1="3" y2="15" />
+    </svg>
+  );
+}
