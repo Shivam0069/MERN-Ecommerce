@@ -246,7 +246,7 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
 
 export default Productmanagement;
 
-export function UploadIcon(props: any) {
+function UploadIcon(props: any) {
   return (
     <svg
       {...props}
