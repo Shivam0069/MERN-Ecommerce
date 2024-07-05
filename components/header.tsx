@@ -65,70 +65,68 @@ export default function Header() {
     event.target.src = profile.src;
   };
   return (
-    <header className="flex h-[41px] w-full max-w-7xl mx-auto items-center justify-between bg-white px-4  dark:bg-gray-950">
-      <div className="flex items-center gap-4">
-        <Link href="/" className="text-lg font-semibold" prefetch={false}>
-          Home
-        </Link>
-        <Link href="/search" className="text-lg font-semibold" prefetch={false}>
-          Search
-        </Link>
-        {/* <div className="relative">
-          <Input
-            type="text"
-            placeholder="Search products..."
-            className="h-8 w-[200px] rounded-md border border-gray-300 bg-gray-100 px-3 text-sm focus:border-gray-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
-          />
-          <SearchIcon className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-        </div> */}
-      </div>
-      <div className="flex items-center gap-4">
-        <Link href="/cart" className="relative" prefetch={false}>
-          <ShoppingCartIcon className="h-6 w-6" />
-          <Badge className="absolute -top-2 -right-2 rounded-full bg-red-500 px-1.5 py-0.5 text-xs text-white">
-            {cartItems?.length}
-          </Badge>
-        </Link>
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Avatar className="h-8 w-8 cursor-pointer">
-                <img
-                  src={user?.photo}
-                  alt="Avatar"
-                  onError={handleImageError}
-                />
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {user?._id && (
-                <DropdownMenuItem onClick={() => router.push("/profile")}>
-                  My Account
-                </DropdownMenuItem>
-              )}
+    <header className="h-[41px] sticky top-0 w-screen  bg-white px-4  dark:bg-gray-950">
+      <div className="flex h-full max-w-7xl  mx-auto items-center justify-between bg-white px-4  dark:bg-gray-950">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-lg font-semibold" prefetch={false}>
+            Home
+          </Link>
+          <Link
+            href="/search"
+            className="text-lg font-semibold"
+            prefetch={false}
+          >
+            Search
+          </Link>
+        </div>
+        <div className="flex items-center gap-4">
+          <Link href="/cart" className="relative" prefetch={false}>
+            <ShoppingCartIcon className="h-6 w-6" />
+            <Badge className="absolute -top-2 -right-2 rounded-full bg-red-500 px-1.5 py-0.5 text-xs text-white">
+              {cartItems?.length}
+            </Badge>
+          </Link>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="h-8 w-8 cursor-pointer">
+                  <img
+                    src={user?.photo}
+                    alt="Avatar"
+                    onError={handleImageError}
+                  />
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {user?._id && (
+                  <DropdownMenuItem onClick={() => router.push("/profile")}>
+                    My Account
+                  </DropdownMenuItem>
+                )}
 
-              {user?.role === "admin" && (
-                <DropdownMenuItem
-                  onClick={() => router.push("/admin/dashboard")}
-                >
-                  Admin
-                </DropdownMenuItem>
-              )}
+                {user?.role === "admin" && (
+                  <DropdownMenuItem
+                    onClick={() => router.push("/admin/dashboard")}
+                  >
+                    Admin
+                  </DropdownMenuItem>
+                )}
 
-              <DropdownMenuItem onClick={() => router.push("/orders")}>
-                Orders
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logoutHandler}>
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <Button variant="outline" onClick={() => router.push("/login")}>
-            Login
-          </Button>
-        )}
+                <DropdownMenuItem onClick={() => router.push("/orders")}>
+                  Orders
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logoutHandler}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="outline" onClick={() => router.push("/login")}>
+              Login
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

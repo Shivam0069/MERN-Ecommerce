@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { IconType } from "react-icons";
 import "../../app/globals.css";
+import { Button } from "../ui/button";
 
 const AdminSidebar = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -46,9 +47,12 @@ const AdminSidebar = () => {
   return (
     <>
       {phoneActive && (
-        <button id="hamburger" onClick={() => setShowModal(true)}>
-          <HiMenuAlt4 />
-        </button>
+        <Button
+          className="absolute top-12 z-10 left-2"
+          onClick={() => setShowModal(true)}
+        >
+          <HiMenuAlt4 className="h-5 w-5" />
+        </Button>
       )}
 
       <aside

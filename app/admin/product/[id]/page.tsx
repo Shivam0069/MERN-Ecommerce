@@ -131,13 +131,20 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-4 md:p-8 max-h-[calc(100vh-41px)] overflow-auto scrollbar-hide">
-          <div className="grid gap-4">
+          <div className="relative grid gap-4">
+            <Button
+              className="absolute top-0 left-0"
+              onClick={() => window.history.back()}
+            >
+              <UploadIcon className="md:hidden w-5 h-5 -rotate-90" />
+              <p className="hidden md:flex">Back</p>
+            </Button>
             <img
               src={data?.product.photo}
               alt={data?.product.name}
               width={600}
               height={600}
-              className="w-full aspect-square object-cover rounded-lg"
+              className="w-full aspect-square object-cover rounded-full"
             />
             <div className="grid gap-1">
               <p className="text-sm text-muted-foreground">Product ID</p>
@@ -216,7 +223,7 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
                     <img
                       src={photoUpdate}
                       alt="Product Image"
-                      className="w-44 mx-auto aspect-square object-cover rounded-lg"
+                      className="w-44 mx-auto aspect-square object-cover rounded-full"
                     />
                   </div>
                 )}
@@ -239,7 +246,7 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
 
 export default Productmanagement;
 
-function UploadIcon(props: any) {
+export function UploadIcon(props: any) {
   return (
     <svg
       {...props}

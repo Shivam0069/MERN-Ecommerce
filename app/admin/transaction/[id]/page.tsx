@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import "../../../globals.css";
+import { UploadIcon } from "../../product/[id]/page";
 const TransactionManagement = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [order, setOrder] = useState<Order>();
@@ -73,9 +74,9 @@ const TransactionManagement = ({ params }: { params: { id: string } }) => {
         </div>
       ) : (
         data && (
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6 max-h-[calc(100vh-41px)] overflow-auto scrollbar-hide">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6 max-h-[calc(100vh-41px)] overflow-y-auto scrollbar-hide">
             <div className="grid gap-4 md:gap-10 items-start">
-              <div className="grid gap-4">
+              <div className=" grid gap-4">
                 <div className="flex items-center justify-between">
                   <h1 className="font-bold text-3xl">
                     Order #{order?._id.slice(0, 5)}...
@@ -85,7 +86,10 @@ const TransactionManagement = ({ params }: { params: { id: string } }) => {
                     <Badge variant="secondary" className="px-3 py-1 text-sm">
                       {order?.status}
                     </Badge>
-                    <Button onClick={updateHandler}>Update</Button>
+                    <Button className="" onClick={() => window.history.back()}>
+                      <UploadIcon className="md:hidden w-5 h-5 -rotate-90" />
+                      <p className="hidden md:flex">Back</p>
+                    </Button>
                     {/* <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -165,7 +169,10 @@ const TransactionManagement = ({ params }: { params: { id: string } }) => {
                   </Table>
                 </CardContent>
               </Card>
-              <Button onClick={deleteHandler}>Delete</Button>
+              <div className="flex flex-col gap-2">
+                <Button onClick={deleteHandler}>Delete</Button>
+                <Button onClick={updateHandler}>Update</Button>
+              </div>
             </div>
             <div className="grid gap-6 md:gap-3 items-start">
               <Card>

@@ -213,7 +213,7 @@ export default function Register() {
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-2 pt-10 max-h-[calc(100vh-41px)]">
+    <div className="mx-auto md:max-w-md  space-y-2 pt-10 pb-4 rounded-2xl px-4 border md:max-h-[calc(100vh-41px)]">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">Create an account</h1>
         <p className="text-gray-500 dark:text-gray-400">
@@ -221,7 +221,7 @@ export default function Register() {
         </p>
       </div>
       <div className="space-y-2">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input
@@ -244,7 +244,7 @@ export default function Register() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="photo">Photo</Label>
             <Input
@@ -265,7 +265,7 @@ export default function Register() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -301,7 +301,7 @@ export default function Register() {
       </div>
       <Separator className="my-2" />
       <div className="space-y-2">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="gender">Gender</Label>
             <Select onValueChange={(value) => setGender(value)}>

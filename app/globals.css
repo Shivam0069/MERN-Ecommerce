@@ -527,8 +527,8 @@ a {
   cursor: pointer;
   color: #2563eb;
   position: fixed;
-  top: 3rem;
-  left: 1rem;
+  top: 30px;
+  left: 0;
   font-size: 1.5rem;
   background-color: #ffffff;
   border-radius: 50%;

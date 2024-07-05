@@ -84,8 +84,8 @@ export default function Search() {
     setLoading(false);
   };
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4  md:px-8  max-h-[calc(100vh-41px)] ">
-      <div className="bg-white dark:bg-gray-950 rounded-lg shadow-sm p-6 pt-10 max-h-[calc(100vh-85px)] overflow-auto scrollbar-hide">
+    <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 px-4  md:px-8  md:max-h-[calc(100vh-41px)] ">
+      <div className="bg-white dark:bg-gray-950 rounded-lg shadow-sm p-6 pt-10 md:max-h-[calc(100vh-85px)] overflow-auto scrollbar-hide">
         <h2 className="text-lg font-semibold mb-4">Filters</h2>
         <div className="mb-6">
           <label htmlFor="sort" className="block text-sm font-medium mb-2">
@@ -141,7 +141,7 @@ export default function Search() {
           </Select>
         </div>
       </div>
-      <div className="bg-white dark:bg-gray-950 rounded-lg shadow-sm p-6 pt-10  h-[calc(100vh-41px)] overflow-y-auto scrollbar-hide">
+      <div className="bg-white dark:bg-gray-950 rounded-lg shadow-sm p-6 pt-10  md:max-h-[calc(100vh-41px)] overflow-y-auto scrollbar-hide">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Products</h2>
           <div className="relative">
