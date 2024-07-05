@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CircleLoader } from "@/helper/loader";
+import SkeletonProductLoader from "@/helper/skeletonProductLoader";
 import {
   useAllFilteredProductsQuery,
   useCategoriesQuery,
@@ -155,7 +156,9 @@ export default function Search() {
           </div>
         </div>
         {productsLoading ? (
-          <CircleLoader />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
+            <SkeletonProductLoader n={3} />
+          </div>
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">

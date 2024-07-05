@@ -2,6 +2,7 @@
 import banner from "@/assets/banner3.jpg";
 import ProductCard from "@/components/productCard";
 import Loader, { CircleLoader } from "@/helper/loader";
+import SkeletonProductLoader from "@/helper/skeletonProductLoader";
 import { useLatestProductsQuery } from "@/store/api/productAPI";
 import { addToCart } from "@/store/slice/cartSlice";
 import { RootState } from "@/store/store";
@@ -72,23 +73,24 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {isLoading ? (
-        <CircleLoader />
-      ) : (
-        <section className="py-12 md:py-20">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold">
-                Latest Products
-              </h2>
-              <Link
-                href="/search"
-                className="text-primary hover:underline transition-colors"
-                prefetch={false}
-              >
-                View All
-              </Link>
+
+      <section className="py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold">Latest Products</h2>
+            <Link
+              href="/search"
+              className="text-primary hover:underline transition-colors"
+              prefetch={false}
+            >
+              View All
+            </Link>
+          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <SkeletonProductLoader n={4} />
             </div>
+          ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {data?.products.map((i) => (
                 <ProductCard
@@ -102,9 +104,9 @@ export default function Home() {
                 />
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
     </div>
   );
 }
