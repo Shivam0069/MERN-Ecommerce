@@ -1,14 +1,24 @@
 "use client";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Loader from "@/helper/loader";
 import { useNewProductMutation } from "@/store/api/productAPI";
 import { responseToast } from "@/utils/features";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import "../../../globals.css";
-
 const NewProduct = () => {
   const [name, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -34,8 +44,7 @@ const NewProduct = () => {
     }
   };
   const router = useRouter();
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitHandler = async () => {
     if (!name || !stock || !price || !photo || !category) {
       toast.error("Fill all the fields");
       return;
@@ -55,74 +64,78 @@ const NewProduct = () => {
     <div className="admin-container">
       <AdminSidebar />
       {isAdding && <Loader />}
-      <main className="product-management !py-0  ">
-        <article className="!py-2 !max-h-[calc(100vh-41px)] overflow-y-auto scrollbar-hide">
-          <form className="" onSubmit={submitHandler}>
-            <h2>New Product</h2>
-            <div>
-              <label>Name</label>
-              <input
-                className="!py-1"
-                required
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label>Price</label>
-              <input
-                className="!py-1"
-                required
-                type="number"
-                placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-              />
-            </div>
-            <div>
-              <label>Stock</label>
-              <input
-                required
-                type="number"
-                className="!py-1"
-                placeholder="Stock"
-                value={stock}
-                onChange={(e) => setStock(Number(e.target.value))}
-              />
-            </div>
 
-            <div>
-              <label>Category</label>
-              <input
-                type="text"
-                required
-                className="!py-1"
-                placeholder="eg. laptop, camera etc"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </div>
+      <div className="max-h-[calc(100vh-41px)] overflow-auto scrollbar-hide w-full">
+        <div className="flex flex-col items-center justify-center  bg-muted/40">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Create New Product</CardTitle>
+              <CardDescription>
+                Fill out the form to add a new product.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  id="name"
+                  placeholder="Product Name"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  id="price"
+                  type="number"
+                  placeholder="Price"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  value={stock}
+                  onChange={(e) => setStock(Number(e.target.value))}
+                  id="stock"
+                  type="number"
+                  placeholder="Stock"
+                />
+              </div>
 
-            <div>
-              <label>Photo</label>
-
-              <input
-                required
-                type="file"
-                onChange={changeImageHandler}
-                className="!py-1"
-              />
-            </div>
-
-            {photoPrev && <img src={photoPrev} alt="New Image" />}
-            <button className="!py-1" type="submit">
-              Create
-            </button>
-          </form>
-        </article>
-      </main>
+              <div className="grid gap-2">
+                <Label htmlFor="category">Category</Label>
+                <Input
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  id="category"
+                  type="text"
+                  placeholder="Category"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="photo">Photo</Label>
+                <Input onChange={changeImageHandler} id="photo" type="file" />
+              </div>
+              {photoPrev && (
+                <img
+                  src={photoPrev}
+                  className="w-40 h-40 rounded-full mx-auto"
+                  alt="New Image"
+                />
+              )}
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button variant="outline" onClick={() => window.history.back()}>
+                Back
+              </Button>
+              <Button onClick={submitHandler}>Create</Button>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
