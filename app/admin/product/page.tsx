@@ -9,6 +9,8 @@ import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Column } from "react-table";
 import "../../globals.css";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface DataType {
   photo: ReactElement;
@@ -45,6 +47,7 @@ const Products = () => {
   const { userData } = useSelector((state: any) => state.user);
   const { data, isLoading, isError } = useAdminProductsQuery(userData?._id);
   const [rows, setRows] = useState<DataType[]>([]);
+  const router = useRouter();
   useEffect(() => {
     if (data) {
       setRows(
@@ -70,10 +73,15 @@ const Products = () => {
   return (
     <div className="admin-container  ">
       <AdminSidebar />
-      <main>{isLoading ? <CircleLoader /> : Table}</main>
-      <Link href="/admin/product/new" className="create-product-btn">
-        <FaPlus />
-      </Link>
+      <main className="relative">
+        {isLoading ? <CircleLoader /> : Table}
+        <Button
+          onClick={() => router.push("/admin/product/new")}
+          className="absolute top-4 right-4"
+        >
+          Add
+        </Button>
+      </main>
     </div>
   );
 };

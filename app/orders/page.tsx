@@ -18,7 +18,7 @@ export default function Component() {
     </div>
   ) : (
     <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)] max-w-7xl mx-auto mt-10">
-      <h2 className="text-lg font-semibold mb-4">Orders</h2>
+      <h2 className="text-4xl font-semibold mb-4 text-center">Orders</h2>
       <div className="grid gap-4">
         {data?.orders.map((item, idx) => (
           <div
@@ -57,6 +57,9 @@ export default function Component() {
             </div>
           </div>
         ))}
+        {data?.orders.length! === 0 && (
+          <div className="text-xl text-center">Nothing to show</div>
+        )}
       </div>
       {/* <table className="w-full table-auto">
             <thead className="bg-gray-100 dark:bg-gray-800">

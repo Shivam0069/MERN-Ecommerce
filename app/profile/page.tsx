@@ -188,51 +188,54 @@ export default function Profile() {
                 </div>
               </div>
             )}
-
-            <h2 className="text-lg font-semibold mb-4">Recent Orders</h2>
-            <div className="grid gap-4">
-              {orders?.orders.slice(0, 2).map((item, idx) => (
-                <div
-                  onClick={() => router.push(`/order/${item._id}`)}
-                  key={idx}
-                  className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
-                      <div>Order #{item._id.slice(0, 5)}... </div>
-                      <div>{item.createdAt?.split("T")[0]}</div>
-                    </div>
-
-                    {item.orderItems.map((product, idx) => (
-                      <div key={idx} className="flex items-center gap-4">
-                        <img
-                          src={product.photo}
-                          alt={product.name}
-                          width={64}
-                          height={64}
-                          className="rounded-md"
-                        />
-                        <div>
-                          <div className="font-medium">
-                            {product.name} x {product.quantity}
-                          </div>
+            {orders?.orders?.length! > 0 && (
+              <>
+                <h2 className="text-lg font-semibold mb-4">Recent Orders</h2>
+                <div className="grid gap-4">
+                  {orders?.orders.slice(0, 2).map((item, idx) => (
+                    <div
+                      onClick={() => router.push(`/order/${item._id}`)}
+                      key={idx}
+                      className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
+                          <div>Order #{item._id.slice(0, 5)}... </div>
+                          <div>{item.createdAt?.split("T")[0]}</div>
                         </div>
-                        <div className="w-0.5 h-14 border"></div>
-                      </div>
-                    ))}
-                  </div>
 
-                  <div className="text-right">
-                    <div className="font-medium">
-                      &#8377;{item.total.toFixed(2)}
+                        {item.orderItems.map((product, idx) => (
+                          <div key={idx} className="flex items-center gap-4">
+                            <img
+                              src={product.photo}
+                              alt={product.name}
+                              width={64}
+                              height={64}
+                              className="rounded-md"
+                            />
+                            <div>
+                              <div className="font-medium">
+                                {product.name} x {product.quantity}
+                              </div>
+                            </div>
+                            <div className="w-0.5 h-14 border"></div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="text-right">
+                        <div className="font-medium">
+                          &#8377;{item.total.toFixed(2)}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {item.status}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {item.status}
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>

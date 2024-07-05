@@ -35,7 +35,19 @@ const saveCartData = (
   user: string | undefined
 ) => {
   if (user === undefined) {
-    localStorage.setItem("cartData", JSON.stringify(state));
+    localStorage.setItem(
+      "cartData",
+      JSON.stringify({
+        ...state,
+        shippingInfo: {
+          address: "",
+          city: "",
+          state: "",
+          country: "",
+          pinCode: "",
+        },
+      })
+    );
   }
 };
 
