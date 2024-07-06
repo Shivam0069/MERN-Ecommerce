@@ -2,6 +2,7 @@
 import { CartItem } from "@/types/types";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 type ProductsProps = {
   productId: string;
   photo: string;
@@ -29,8 +30,12 @@ export default function ProductCard({
     };
     handler(cartItem);
   };
+  const router = useRouter();
   return (
-    <div className="bg-card rounded-lg border-t shadow-lg overflow-hidden">
+    <div
+      onClick={() => router.push(`/product/${productId}`)}
+      className="bg-card rounded-lg border-t shadow-lg overflow-hidden"
+    >
       <img
         src={photo}
         alt="Product Image"
