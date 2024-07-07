@@ -22,6 +22,7 @@ import "../../../globals.css";
 const NewProduct = () => {
   const [name, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<number>(1000);
   const [stock, setStock] = useState<number>(1);
   const [photoPrev, setPhotoPrev] = useState<string>("");
@@ -49,12 +50,15 @@ const NewProduct = () => {
       toast.error("Fill all the fields");
       return;
     }
+    console.log(description, "description");
+
     const formData = new FormData();
     formData.set("name", name);
     formData.set("price", price.toString());
     formData.set("stock", stock.toString());
     formData.set("photo", photo);
     formData.set("category", category);
+    formData.set("description", description);
 
     const res = await newProduct({ id: userData?._id!, formData: formData });
     responseToast(res, router, "/admin/product");
@@ -113,6 +117,16 @@ const NewProduct = () => {
                   id="category"
                   type="text"
                   placeholder="Category"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="description">Description</Label>
+                <Input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  type="text"
+                  placeholder="Description"
                 />
               </div>
               <div className="grid gap-2">

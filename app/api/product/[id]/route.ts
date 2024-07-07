@@ -104,6 +104,7 @@ export async function PUT(
     const name = data.get("name") as string;
     const price = data.get("price") as string;
     const stock = data.get("stock") as string;
+    const description = data.get("description") as string;
     let category = data.get("category") as string;
 
     // Update the product fields if they are provided
@@ -111,6 +112,7 @@ export async function PUT(
     if (price) product.price = price;
     if (stock) product.stock = stock;
     if (category) product.category = category.toLowerCase();
+    if (description) product.description = description;
 
     // Save the updated product to the database
     const updatedProduct = await product.save();

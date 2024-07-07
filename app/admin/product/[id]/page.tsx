@@ -16,6 +16,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import "../../../globals.css";
+import { Textarea } from "@/components/ui/textarea";
 const Productmanagement = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const userData = useSelector((state: any) => state.user.userData);
@@ -30,25 +31,30 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
   const [name, setName] = useState<string>("");
   const [photo, setPhoto] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const [priceUpdate, setPriceUpdate] = useState<number>(0);
   const [stockUpdate, setStockUpdate] = useState<number>(0);
   const [nameUpdate, setNameUpdate] = useState<string>("");
   const [categoryUpdate, setCategoryUpdate] = useState<string>("");
+  const [descriptionUpdate, setDescriptionUpdate] = useState<string>("");
   const [photoUpdate, setPhotoUpdate] = useState<string>("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  console.log(descriptionUpdate);
 
   useEffect(() => {
     if (data) {
       setPhoto(data.product.photo || "");
       setName(data.product.name || "");
       setCategory(data.product.category || "");
+      setDescription(data.product.description || "");
       setPrice(data.product.price ?? 0);
       setStock(data.product.stock ?? 0);
 
       setPhotoUpdate(data.product.photo || "");
       setNameUpdate(data.product.name || "");
       setCategoryUpdate(data.product.category || "");
+      setDescriptionUpdate(data.product.description || "");
       setPriceUpdate(data.product.price ?? 0);
       setStockUpdate(data.product.stock ?? 0);
     }
@@ -94,6 +100,11 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
       formData.set("category", categoryUpdate);
       hasChanges = true;
     }
+    if (description !== descriptionUpdate) {
+      formData.set("description", descriptionUpdate);
+      hasChanges = true;
+    }
+
     if (photoFile) {
       formData.set("photo", photoFile);
       hasChanges = true;
@@ -198,6 +209,15 @@ const Productmanagement = ({ params }: { params: { id: string } }) => {
                 placeholder="Game"
                 value={categoryUpdate}
                 onChange={(e) => setCategoryUpdate(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Description..."
+                value={descriptionUpdate}
+                onChange={(e) => setDescriptionUpdate(e.target.value)}
               />
             </div>
             <div className="grid gap-3">

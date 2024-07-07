@@ -4,7 +4,7 @@ import Loader from "@/helper/loader";
 import { Order, OrderItem } from "@/types/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function OrderDetail({ params }: { params: { id: string } }) {
   const id = params.id;

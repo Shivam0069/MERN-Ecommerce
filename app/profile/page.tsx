@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Loader from "@/helper/loader";
+import ProfileSkeleton from "@/helper/profileSkeleton";
 import { useMyOrdersQuery } from "@/store/api/orderAPI";
 import { deleteCart } from "@/store/slice/cartSlice";
 import { setUserNull } from "@/store/slice/userSlice";
@@ -78,10 +79,9 @@ export default function Profile() {
   };
 
   return isLoading || ordersLoading ? (
-    <Loader />
+    <ProfileSkeleton />
   ) : (
     <div className="container mx-auto px-4 md:px-6 py-8 lg:py-12 max-h-[calc(100vh-41px)] overflow-auto scrollbar-hide">
-      {loading && <Loader />}
       <div className="grid gap-8 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start">
         <div className="flex flex-col items-center gap-4">
           <Avatar className="w-24 h-24 border">

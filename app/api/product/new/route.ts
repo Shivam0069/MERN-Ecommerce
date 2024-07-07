@@ -1,12 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
-import Product from "@/models/products";
-import path, { join, extname } from "path"; // Import extname for getting file extension
-import { promises as fs } from "fs";
-import { AdminOnly } from "@/helper/adminOnly";
-import { handleFileUpload } from "@/helper/FileUpload";
-import { invalidateCache } from "@/helper/invalidateCache";
 import { uploadImage } from "@/helper/ImageUpload";
+import { AdminOnly } from "@/helper/adminOnly";
+import { invalidateCache } from "@/helper/invalidateCache";
+import Product from "@/models/products";
+import { NextRequest, NextResponse } from "next/server";
 
 // Establish database connection
 connect();
@@ -32,14 +29,18 @@ export async function POST(request: NextRequest) {
     const name = data.get("name") as string;
     const price = data.get("price") as string;
     const stock = data.get("stock") as string;
+    const description = data.get("description") as String;
+    console.log(description, "description");
+
     let category = data.get("category") as string;
 
     // Validate that all required fields are provided
-    if (!name || !price || !stock || !category) {
+    if (!name || !price || !stock || !category || !description) {
       return NextResponse.json(
         {
           success: false,
-          message: "All fields (name, price, stock, category) are required",
+          message:
+            "All fields (name, price, stock, category, description) are required",
         },
         { status: 400 }
       );
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
       price,
       stock,
       category,
+      description,
       photo: url,
     });
     const savedProduct = await product.save();

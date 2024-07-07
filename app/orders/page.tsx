@@ -1,5 +1,6 @@
 "use client";
 
+import OrdersSkeleton from "@/helper/OrdersSkeleton";
 import { CircleLoader } from "@/helper/loader";
 import { useMyOrdersQuery } from "@/store/api/orderAPI";
 import { RootState } from "@/store/store";
@@ -13,9 +14,7 @@ export default function Component() {
   console.log(data, "myOrders");
   const router = useRouter();
   return isLoading ? (
-    <div className="w-screen flex justify-center items-center h-[calc(100vh-41px)]">
-      <CircleLoader />
-    </div>
+    <OrdersSkeleton />
   ) : (
     <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)] max-w-7xl mx-auto mt-10">
       <h2 className="text-4xl font-semibold mb-4 text-center">Orders</h2>
@@ -26,29 +25,31 @@ export default function Component() {
             key={idx}
             className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
           >
-            <div className="flex items-center gap-4">
+            <div className="flex  flex-1 items-center gap-4">
               <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
                 <div>Order #{item._id.slice(0, 5)}... </div>
                 <div>{item.createdAt?.split("T")[0]}</div>
               </div>
 
-              {item.orderItems.map((product, idx) => (
-                <div key={idx} className="flex items-center gap-4">
-                  <img
-                    src={product.photo}
-                    alt={product.name}
-                    width={64}
-                    height={64}
-                    className="rounded-md"
-                  />
-                  <div>
-                    <div className="font-medium">
-                      {product.name} x {product.quantity}
+              <div className="flex items-center gap-4   overflow-x-auto max-w-full scrollbar-hide ">
+                {item.orderItems.map((product, idx) => (
+                  <div key={idx} className="flex items-center gap-4">
+                    <img
+                      src={product.photo}
+                      alt={product.name}
+                      width={64}
+                      height={64}
+                      className="rounded-md"
+                    />
+                    <div>
+                      <div className="font-medium">
+                        {product.name} x {product.quantity}
+                      </div>
                     </div>
+                    <div className="w-0.5 h-14 border"></div>
                   </div>
-                  <div className="w-0.5 h-14 border"></div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             <div className="text-right">

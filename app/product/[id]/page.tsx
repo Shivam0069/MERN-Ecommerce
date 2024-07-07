@@ -22,6 +22,8 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     const err = error as CustomError;
     toast.error(err.data.message);
   }
+  console.log(data, "productData");
+
   return isLoading ? (
     <SkeletonProductDetailLoader />
   ) : (
@@ -69,7 +71,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           alt={data?.product.name}
           width={600}
           height={600}
-          className="w-full h-[400px] object-cover"
+          className="w-full h-[400px] object-contain"
         />
       </div>
       <div className="grid gap-4">
@@ -206,13 +208,17 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
         <div className="grid gap-4">
           <h2 className="text-2xl font-bold">Product Description</h2>
           <div className="text-muted-foreground leading-relaxed">
-            <p>
-              Introducing the Acme Prism T-Shirt, a perfect blend of style and
-              comfort for the modern individual. This tee is crafted with a
-              meticulous composition of 60% combed ringspun cotton and 40%
-              polyester jersey, ensuring a soft and breathable fabric that feels
-              gentle against the skin.
-            </p>
+            <div>
+              {data?.product.description || (
+                <p>
+                  Introducing the Acme Prism T-Shirt, a perfect blend of style
+                  and comfort for the modern individual. This tee is crafted
+                  with a meticulous composition of 60% combed ringspun cotton
+                  and 40% polyester jersey, ensuring a soft and breathable
+                  fabric that feels gentle against the skin.
+                </p>
+              )}
+            </div>
             <p>
               The design of the Acme Prism T-Shirt is as striking as it is
               comfortable. The shirt features a unique prism-inspired pattern
