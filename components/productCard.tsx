@@ -1,8 +1,7 @@
 "use client";
 import { CartItem } from "@/types/types";
-import Link from "next/link";
-import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 type ProductsProps = {
   productId: string;
   photo: string;
@@ -19,7 +18,8 @@ export default function ProductCard({
   stock,
   handler,
 }: ProductsProps) {
-  const addToCartHandler = () => {
+  const addToCartHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     const cartItem: CartItem = {
       productId,
       photo,
@@ -34,7 +34,7 @@ export default function ProductCard({
   return (
     <div
       onClick={() => router.push(`/product/${productId}`)}
-      className="bg-card rounded-lg border-t shadow-lg overflow-hidden"
+      className="bg-card rounded-lg border-t shadow-lg overflow-hidden cursor-pointer"
     >
       <img
         src={photo}

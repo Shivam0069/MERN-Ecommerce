@@ -1,29 +1,72 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import SkeletonProductDetailLoader from "@/helper/skeletonProductDetail";
-import { useProductByIdQuery } from "@/store/api/productAPI";
+  useAllFilteredProductsQuery,
+  useProductByIdQuery,
+} from "@/store/api/productAPI";
+import { addToCart } from "@/store/slice/cartSlice";
+import { RootState } from "@/store/store";
 import { CustomError } from "@/types/api-types";
+import { CartItem } from "@/types/types";
 import Link from "next/link";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const id = params.id;
   const { data, isLoading, isError, error } = useProductByIdQuery(id);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
+  const user = useSelector((state: RootState) => state.user.userData);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const {
+    data: searchedProducts,
+    isLoading: productsLoading,
+    isError: productsIsError,
+    error: productsError,
+  } = useAllFilteredProductsQuery({
+    sort: "",
+    price: 100000,
+    page: 1,
+    search: "",
+    category: data?.product.category || "",
+  });
+
   if (isError) {
     const err = error as CustomError;
     toast.error(err.data.message);
   }
   console.log(data, "productData");
+  const addToCartHandler = () => {
+    const cartItem: CartItem = {
+      productId: data?.product._id!,
+      photo: data?.product.photo!,
+      name: data?.product.name!,
+      price: data?.product.price!,
+      quantity: 1,
+      stock: data?.product.stock!,
+    };
+    setLoading(true);
+    const index = cartItems.findIndex(
+      (i: CartItem) => i.productId === cartItem.productId
+    );
+    if (index !== -1) {
+      setLoading(false);
+      return toast.success("Product already exists in cart");
+    }
+    if (cartItem.stock <= cartItem.quantity) {
+      setLoading(false);
+      return toast.error("Out of stock!");
+    }
 
+    dispatch(addToCart({ cartItem, user: user?._id }));
+
+    toast.success("Product added to cart");
+    setLoading(false);
+  };
   return isLoading ? (
     <SkeletonProductDetailLoader />
   ) : (
@@ -176,7 +219,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
               </Label>
             </RadioGroup>
           </div> */}
-          <div className="grid gap-2">
+          {/* <div className="grid gap-2">
             <Label htmlFor="quantity" className="text-base">
               Quantity
             </Label>
@@ -192,10 +235,15 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                 <SelectItem value="5">5</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           <div className="flex gap-2">
-            <Button size="lg" className="flex-1">
-              Add to Cart
+            <Button
+              type="button"
+              onClick={addToCartHandler}
+              size="lg"
+              className="flex-1"
+            >
+              {loading ? "Adding..." : "Add to Cart"}
             </Button>
             {/* <Button size="lg" variant="outline" className="flex-1">
               <HeartIcon className="w-4 h-4 mr-2" />
@@ -284,68 +332,46 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-        <div className="grid gap-4">
-          <h2 className="text-2xl font-bold">Related Products</h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div className="relative overflow-hidden transition-transform duration-300 ease-in-out rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2">
-              <Link href="#" className="absolute inset-0 z-10" prefetch={false}>
-                <span className="sr-only">View</span>
-              </Link>
-              <img
-                src="/placeholder.svg"
-                alt="Product 1"
-                width={500}
-                height={400}
-                className="object-cover w-full h-64"
-              />
-              <div className="p-4 bg-background">
-                <h3 className="text-xl font-bold">Classic Leather Shoes</h3>
-                <p className="text-sm text-muted-foreground">
-                  Elegant and comfortable
-                </p>
-                <h4 className="text-lg font-semibold">$59.99</h4>
-              </div>
-            </div>
-            <div className="relative overflow-hidden transition-transform duration-300 ease-in-out rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2">
-              <Link href="#" className="absolute inset-0 z-10" prefetch={false}>
-                <span className="sr-only">View</span>
-              </Link>
-              <img
-                src="/placeholder.svg"
-                alt="Product 2"
-                width={500}
-                height={400}
-                className="object-cover w-full h-64"
-              />
-              <div className="p-4 bg-background">
-                <h3 className="text-xl font-bold">Designer Handbag</h3>
-                <p className="text-sm text-muted-foreground">
-                  Fashion statement
-                </p>
-                <h4 className="text-lg font-semibold">$89.99</h4>
-              </div>
-            </div>
-            <div className="relative overflow-hidden transition-transform duration-300 ease-in-out rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2">
-              <Link href="#" className="absolute inset-0 z-10" prefetch={false}>
-                <span className="sr-only">View</span>
-              </Link>
-              <img
-                src="/placeholder.svg"
-                alt="Product 3"
-                width={500}
-                height={400}
-                className="object-cover w-full h-64"
-              />
-              <div className="p-4 bg-background">
-                <h3 className="text-xl font-bold">Wireless Earbuds</h3>
-                <p className="text-sm text-muted-foreground">
-                  Crystal clear audio
-                </p>
-                <h4 className="text-lg font-semibold">$69.99</h4>
-              </div>
+        {searchedProducts?.products.length! > 1 && (
+          <div className="grid gap-4">
+            <h2 className="text-2xl font-bold">Related Products</h2>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {searchedProducts?.products.map(
+                (item, idx) =>
+                  item?._id !== data?.product._id && (
+                    <div
+                      key={idx}
+                      className="relative overflow-hidden transition-transform duration-300 ease-in-out rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2"
+                    >
+                      <Link
+                        href={item?._id}
+                        className="absolute inset-0 z-10"
+                        prefetch={false}
+                      >
+                        <span className="sr-only">View</span>
+                      </Link>
+                      <img
+                        src={item?.photo}
+                        alt={item.name}
+                        width={500}
+                        height={400}
+                        className="object-cover w-full h-64"
+                      />
+                      <div className="p-4 bg-background">
+                        <h3 className="text-xl font-bold">{item?.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {item.description}
+                        </p>
+                        <h4 className="text-lg font-semibold">
+                          &#8377;{item.price}
+                        </h4>
+                      </div>
+                    </div>
+                  )
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -424,5 +450,80 @@ function StarIcon(props: any) {
     >
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
+  );
+}
+
+function SkeletonProductDetailLoader() {
+  return (
+    <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 py-8">
+      <div className="grid gap-4">
+        <div className="w-full h-[400px] bg-gray-300 animate-pulse rounded-lg"></div>
+      </div>
+      <div className="grid gap-4">
+        <div className="h-8 bg-gray-300 rounded w-3/4 animate-pulse mb-2"></div>
+        <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse mb-4"></div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, idx) => (
+              <div
+                key={idx}
+                className="w-5 h-5 bg-gray-300 rounded-full animate-pulse"
+              ></div>
+            ))}
+          </div>
+          <div className="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+        </div>
+        <div className="flex items-baseline gap-4">
+          <div className="h-8 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+        </div>
+        <div className="grid gap-2">
+          <div className="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+          <div className="h-10 bg-gray-300 rounded w-full animate-pulse"></div>
+        </div>
+        <div className="flex gap-2">
+          <div className="h-12 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+          <div className="h-12 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+        </div>
+      </div>
+      <div className="col-span-2 grid gap-8">
+        <div className="grid gap-4">
+          <div className="h-6 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded w-full animate-pulse mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full animate-pulse"></div>
+        </div>
+        <div className="grid gap-4">
+          <div className="h-6 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+          {[...Array(2)].map((_, idx) => (
+            <div key={idx} className="flex gap-4">
+              <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
+              <div className="grid gap-2 flex-1">
+                <div className="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded w-full animate-pulse mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-full animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="grid gap-4">
+          <div className="h-6 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, idx) => (
+              <div
+                key={idx}
+                className="relative overflow-hidden transition-transform duration-300 ease-in-out rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2"
+              >
+                <div className="w-full h-64 bg-gray-300 animate-pulse"></div>
+                <div className="p-4 bg-background">
+                  <div className="h-4 bg-gray-300 rounded w-1/2 animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/4 animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

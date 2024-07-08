@@ -1,10 +1,7 @@
 "use client";
 
-import OrdersSkeleton from "@/helper/OrdersSkeleton";
-import { CircleLoader } from "@/helper/loader";
 import { useMyOrdersQuery } from "@/store/api/orderAPI";
 import { RootState } from "@/store/store";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 
@@ -19,21 +16,21 @@ export default function Component() {
     <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)] max-w-7xl mx-auto mt-10">
       <h2 className="text-4xl font-semibold mb-4 text-center">Orders</h2>
       <div className="grid gap-4">
-        {data?.orders.map((item, idx) => (
-          <div
-            onClick={() => router.push(`/order/${item._id}`)}
-            key={idx}
-            className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
-          >
-            <div className="flex  flex-1 items-center gap-4">
-              <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
-                <div>Order #{item._id.slice(0, 5)}... </div>
-                <div>{item.createdAt?.split("T")[0]}</div>
-              </div>
+        {data?.orders.map((order, orderIdx): any =>
+          order.orderItems.map((product, productIdx) => (
+            <div
+              key={`${orderIdx}-${productIdx}`}
+              onClick={() => router.push(`/order/${order._id}`)}
+              className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
+            >
+              <div className="flex flex-1 items-center gap-4">
+                <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
+                  <div>Order #{order._id.slice(-5)} </div>
+                  <div>{order.createdAt?.split("T")[0]}</div>
+                </div>
 
-              <div className="flex items-center gap-4   overflow-x-auto max-w-full scrollbar-hide ">
-                {item.orderItems.map((product, idx) => (
-                  <div key={idx} className="flex items-center gap-4">
+                <div className="flex items-center gap-4 overflow-x-auto max-w-full scrollbar-hide">
+                  <div className="flex items-center gap-4">
                     <img
                       src={product.photo}
                       alt={product.name}
@@ -46,87 +43,22 @@ export default function Component() {
                         {product.name} x {product.quantity}
                       </div>
                     </div>
-                    <div className="w-0.5 h-14 border"></div>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="font-medium">
+                  &#8377;{order.total.toFixed(2)}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {order.status}
+                </div>
               </div>
             </div>
-
-            <div className="text-right">
-              <div className="font-medium">&#8377;{item.total.toFixed(2)}</div>
-              <div className="text-sm text-muted-foreground">{item.status}</div>
-            </div>
-          </div>
-        ))}
-        {data?.orders.length! === 0 && (
-          <div className="text-xl text-center">Nothing to show</div>
+          ))
         )}
       </div>
-      {/* <table className="w-full table-auto">
-            <thead className="bg-gray-100 dark:bg-gray-800">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                  Order
-                </th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                  Date
-                </th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                  Items
-                </th>
-                <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">
-                  Total
-                </th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.orders.map((order) => (
-                <tr
-                  key={order._id}
-                  className="border-b border-gray-200 dark:border-gray-800"
-                >
-                  <td className="px-4 py-3 font-medium">
-                    <Link
-                      href={`/order/${order._id}`}
-                      className="text-primary hover:underline"
-                      prefetch={false}
-                    >
-                      {order._id}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500 dark:text-gray-400">
-                    {order.createdAt?.split("T")[0]}
-                  </td>
-                  <td className="px-4 py-3">
-                    {order.orderItems.map((item, index) => (
-                      <div key={index}>
-                        {item.quantity} x {item.name}
-                      </div>
-                    ))}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium">
-                    &#8377;{order.total.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === "Delivered"
-                          ? "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400"
-                          : order.status === "Shipped"
-                          ? "bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
-                          : "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400"
-                      }`}
-                    >
-                      {order.status}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
     </div>
   );
 }
@@ -150,3 +82,38 @@ function SearchIcon(props: any) {
     </svg>
   );
 }
+
+const OrdersSkeleton = () => {
+  return (
+    <div className="overflow-x-auto overflow-y-auto scrollbar-hide h-[calc(100vh-150px)] max-w-7xl mx-auto mt-10">
+      <h2 className="text-4xl font-semibold mb-4 text-center">Orders</h2>
+      <div className="grid gap-4">
+        {[...Array(3)].map((_, idx) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between border rounded-lg p-4 animate-pulse"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-2">
+                <div className="w-24 h-5 bg-gray-300 rounded"></div>
+                <div className="w-20 h-5 bg-gray-300 rounded"></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gray-300 rounded-md"></div>
+                <div>
+                  <div className="w-24 h-5 bg-gray-300 rounded"></div>
+                  <div className="w-12 h-5 bg-gray-300 rounded"></div>
+                </div>
+                <div className="w-0.5 h-14 bg-gray-300"></div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="w-20 h-5 bg-gray-300 rounded"></div>
+              <div className="w-16 h-5 bg-gray-300 rounded"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

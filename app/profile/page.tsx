@@ -3,8 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Loader from "@/helper/loader";
-import ProfileSkeleton from "@/helper/profileSkeleton";
 import { useMyOrdersQuery } from "@/store/api/orderAPI";
 import { deleteCart } from "@/store/slice/cartSlice";
 import { setUserNull } from "@/store/slice/userSlice";
@@ -192,47 +190,48 @@ export default function Profile() {
               <>
                 <h2 className="text-lg font-semibold mb-4">Recent Orders</h2>
                 <div className="grid gap-4">
-                  {orders?.orders.slice(0, 2).map((item, idx) => (
-                    <div
-                      onClick={() => router.push(`/order/${item._id}`)}
-                      key={idx}
-                      className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
-                          <div>Order #{item._id.slice(0, 5)}... </div>
-                          <div>{item.createdAt?.split("T")[0]}</div>
-                        </div>
+                  {orders?.orders.slice(0, 2).map((order, orderIdx): any =>
+                    order.orderItems.map((product, productIdx) => (
+                      <div
+                        key={`${orderIdx}-${productIdx}`}
+                        onClick={() => router.push(`/order/${order._id}`)}
+                        className="flex items-center justify-between border rounded-lg p-4 cursor-pointer"
+                      >
+                        <div className="flex flex-1 items-center gap-4">
+                          <div className="text-sm text-muted-foreground flex flex-col justify-center gap-2">
+                            <div>Order #{order._id.slice(-5)} </div>
+                            <div>{order.createdAt?.split("T")[0]}</div>
+                          </div>
 
-                        {item.orderItems.map((product, idx) => (
-                          <div key={idx} className="flex items-center gap-4">
-                            <img
-                              src={product.photo}
-                              alt={product.name}
-                              width={64}
-                              height={64}
-                              className="rounded-md"
-                            />
-                            <div>
-                              <div className="font-medium">
-                                {product.name} x {product.quantity}
+                          <div className="flex items-center gap-4 overflow-x-auto max-w-full scrollbar-hide">
+                            <div className="flex items-center gap-4">
+                              <img
+                                src={product.photo}
+                                alt={product.name}
+                                width={64}
+                                height={64}
+                                className="rounded-md"
+                              />
+                              <div>
+                                <div className="font-medium">
+                                  {product.name} x {product.quantity}
+                                </div>
                               </div>
                             </div>
-                            <div className="w-0.5 h-14 border"></div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
 
-                      <div className="text-right">
-                        <div className="font-medium">
-                          &#8377;{item.total.toFixed(2)}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {item.status}
+                        <div className="text-right">
+                          <div className="font-medium">
+                            &#8377;{order.total.toFixed(2)}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {order.status}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </>
             )}
@@ -268,3 +267,68 @@ function EyeIcon(props: any) {
     </svg>
   );
 }
+
+const ProfileSkeleton = () => {
+  return (
+    <div className="container mx-auto px-4 md:px-6 py-8 lg:py-12 max-h-[calc(100vh-41px)] overflow-auto">
+      <div className="grid gap-8 md:grid-cols-[200px_1fr] lg:grid-cols-[300px_1fr] items-start">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-24 h-24 bg-gray-300 rounded-full animate-pulse"></div>
+          <div className="w-20 h-6 bg-gray-300 animate-pulse"></div>
+          <div className="w-20 h-6 bg-gray-300 animate-pulse"></div>
+        </div>
+        <div className="grid gap-6">
+          <div className="grid gap-2">
+            <div className="w-48 h-8 bg-gray-300 animate-pulse"></div>
+            <div className="w-36 h-5 bg-gray-300 animate-pulse"></div>
+            <div className="w-24 h-5 bg-gray-300 animate-pulse"></div>
+            <div className="space-y-4">
+              <div>
+                <div className="w-44 h-7 bg-gray-300 animate-pulse mb-2"></div>
+                <div className="grid gap-2">
+                  <div className="w-full h-10 bg-gray-300 animate-pulse"></div>
+                  <div className="w-full h-10 bg-gray-300 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            <div className="w-44 h-7 bg-gray-300 animate-pulse mb-4"></div>
+            <div className="grid gap-4">
+              <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gray-300 animate-pulse rounded-md"></div>
+                  <div>
+                    <div className="w-24 h-5 bg-gray-300 animate-pulse"></div>
+                    <div className="w-16 h-5 bg-gray-300 animate-pulse"></div>
+                  </div>
+                  <div className="w-0.5 h-16 bg-gray-300 animate-pulse"></div>
+                </div>
+                <div className="text-right">
+                  <div className="w-20 h-5 bg-gray-300 animate-pulse"></div>
+                  <div className="w-16 h-5 bg-gray-300 animate-pulse"></div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gray-300 animate-pulse rounded-md"></div>
+                  <div>
+                    <div className="w-24 h-5 bg-gray-300 animate-pulse"></div>
+                    <div className="w-16 h-5 bg-gray-300 animate-pulse"></div>
+                  </div>
+                  <div className="w-0.5 h-16 bg-gray-300 animate-pulse"></div>
+                </div>
+                <div className="text-right">
+                  <div className="w-20 h-5 bg-gray-300 animate-pulse"></div>
+                  <div className="w-16 h-5 bg-gray-300 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-between mt-8">
+        <div className="w-20 h-8 bg-gray-300 animate-pulse"></div>
+        <div className="w-24 h-8 bg-gray-300 animate-pulse"></div>
+      </div>
+    </div>
+  );
+};
