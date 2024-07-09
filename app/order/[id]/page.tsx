@@ -28,35 +28,7 @@ export default function OrderDetail({ params }: { params: { id: string } }) {
     };
     getOrderDetail();
   }, []);
-  async function downloadInvoice() {
-    try {
-      setInvoiceLoading(true);
-      const response = await axios.post(
-        "/api/invoice",
-        { order },
-        {
-          responseType: "blob", // Important: responseType should be 'blob' to handle binary data (PDF)
-        }
-      );
 
-      // Create a blob link to download the PDF
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "invoice.pdf");
-      document.body.appendChild(link);
-      link.click();
-
-      // Clean up resources
-      link.parentNode!.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      // Handle error as needed
-    } finally {
-      setInvoiceLoading(false);
-    }
-  }
   useEffect(() => {
     console.log(order, "orderDetail");
   }, [order]);
@@ -139,9 +111,6 @@ export default function OrderDetail({ params }: { params: { id: string } }) {
       <div className="flex justify-between mt-8">
         <Button onClick={() => router.push("/orders")} size="sm">
           My Orders
-        </Button>
-        <Button onClick={downloadInvoice} size="sm">
-          Invoice
         </Button>
       </div>
     </div>
