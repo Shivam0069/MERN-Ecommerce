@@ -19,11 +19,7 @@ export const invalidateCache = ({
   productId,
 }: invalidateCacheTypes) => {
   if (product) {
-    const productKeys: string[] = [
-      "latest-products",
-      "categories",
-      "admin-products",
-    ];
+    const productKeys: string[] = ["categories", "admin-products"];
     if (typeof productId === "string") productKeys.push(`product-${productId}`);
     if (typeof productId === "object") {
       for (let i = 0; i < productId.length; i++) {

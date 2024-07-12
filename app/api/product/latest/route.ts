@@ -8,13 +8,8 @@ connect();
 
 export async function GET(request: NextRequest) {
   try {
-    let products;
-    if (myCache.has("latest-products")) {
-      products = JSON.parse(myCache.get("latest-products") as string);
-    } else {
-      products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
-      myCache.set("latest-products", JSON.stringify(products));
-    }
+    let products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+
     // Fetch the latest 5 products sorted by creation date in descending order
 
     // Respond with the fetched products
