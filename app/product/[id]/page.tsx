@@ -72,49 +72,12 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   ) : (
     <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 py-8">
       <div className="grid gap-4">
-        {/* <Carousel className="rounded-lg overflow-hidden">
-          <CarouselContent>
-            <CarouselItem>
-              <img
-                src="/placeholder.svg"
-                alt="Product Image"
-                width={600}
-                height={600}
-                className="w-full h-[400px] object-cover"
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                src="/placeholder.svg"
-                alt="Product Image"
-                width={600}
-                height={600}
-                className="w-full h-[400px] object-cover"
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                src="/placeholder.svg"
-                alt="Product Image"
-                width={600}
-                height={600}
-                className="w-full h-[400px] object-cover"
-              />
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 text-primary-foreground">
-            <ChevronLeftIcon className="w-6 h-6" />
-          </CarouselPrevious>
-          <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 text-primary-foreground">
-            <ChevronRightIcon className="w-6 h-6" />
-          </CarouselNext>
-        </Carousel> */}
         <img
           src={data?.product.photo}
           alt={data?.product.name}
           width={600}
           height={600}
-          className="w-full h-[400px] object-contain"
+          className="w-full md:h-[400px] object-contain"
         />
       </div>
       <div className="grid gap-4">
@@ -252,7 +215,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           </div>
         </form>
       </div>
-      <div className="col-span-2 grid gap-8">
+      <div className="md:col-span-2 grid gap-8">
         <div className="grid gap-4">
           <h2 className="text-2xl font-bold">Product Description</h2>
           <div className="text-muted-foreground leading-relaxed">
@@ -278,7 +241,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           <h2 className="text-2xl font-bold">Customer Reviews</h2>
           <div className="grid gap-6">
             <div className="flex gap-4">
-              <Avatar className="w-10 h-10 border">
+              <Avatar className="w-10 h-10 border -z-10 ">
                 <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
@@ -302,7 +265,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className="flex gap-4">
-              <Avatar className="w-10 h-10 border">
+              <Avatar className="w-10 h-10 border -z-10 ">
                 <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
@@ -457,7 +420,7 @@ function SkeletonProductDetailLoader() {
   return (
     <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 py-8">
       <div className="grid gap-4">
-        <div className="w-full h-[400px] bg-gray-300 animate-pulse rounded-lg"></div>
+        <div className="w-full h-[200px] md:h-[400px] bg-gray-300 animate-pulse rounded-lg"></div>
       </div>
       <div className="grid gap-4">
         <div className="h-8 bg-gray-300 rounded w-3/4 animate-pulse mb-2"></div>
@@ -486,7 +449,7 @@ function SkeletonProductDetailLoader() {
           <div className="h-12 bg-gray-300 rounded w-1/2 animate-pulse"></div>
         </div>
       </div>
-      <div className="col-span-2 grid gap-8">
+      <div className="md:col-span-2 grid gap-8">
         <div className="grid gap-4">
           <div className="h-6 bg-gray-300 rounded w-1/4 animate-pulse"></div>
           <div className="h-4 bg-gray-300 rounded w-full animate-pulse mb-2"></div>
