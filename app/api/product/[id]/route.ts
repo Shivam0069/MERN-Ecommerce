@@ -8,6 +8,7 @@ import { AdminOnly } from "@/helper/adminOnly";
 import { myCache } from "@/helper/myCache";
 import { invalidateCache } from "@/helper/invalidateCache";
 import { uploadImage } from "@/helper/ImageUpload";
+import Review from "@/models/review";
 // Establish database connection
 connect();
 
@@ -22,20 +23,27 @@ export async function GET(
     if (myCache.has(`product-${id}`)) {
       product = JSON.parse(myCache.get(`product-${id}`) as string);
     } else {
-      product = await Product.findById(id);
+      product = await Product.findById(id).lean();
+      if (!product) {
+        return NextResponse.json(
+          { success: false, message: "Product not found" },
+          { status: 404 }
+        );
+      }
+      const reviews = await Review.find({ productId: id }).lean();
 
+      product.reviews = reviews;
       myCache.set(`product-${id}`, JSON.stringify(product));
     }
-
-    // Fetch the product by ID from the database
-
-    // If the product is not found, return a 404 response
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
         { status: 404 }
       );
     }
+    // Fetch the product by ID from the database
+
+    // If the product is not found, return a 404 response
 
     // Respond with the product data if found
     return NextResponse.json(

@@ -7,6 +7,13 @@ export type User = {
   dob: string;
   _id: string;
 };
+export type Review = {
+  _id: string;
+  userName: string;
+  userPhoto: string;
+  rating: number;
+  comment: string;
+};
 
 export type Product = {
   name: string;
@@ -16,6 +23,7 @@ export type Product = {
   photo: string;
   _id: string;
   description?: string;
+  reviews?: Review[];
 };
 
 export type ShippingInfo = {

@@ -24,6 +24,12 @@ const productSchema = new mongoose.Schema(
       required: [true, "Please enter Product Category"],
       trim: true,
     },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
   },
   { timestamps: true }
 );
