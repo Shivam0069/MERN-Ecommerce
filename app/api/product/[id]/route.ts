@@ -9,6 +9,7 @@ import { myCache } from "@/helper/myCache";
 import { invalidateCache } from "@/helper/invalidateCache";
 import { uploadImage } from "@/helper/ImageUpload";
 import Review from "@/models/review";
+import { Product as ProductType } from "@/types/types";
 // Establish database connection
 connect();
 
@@ -19,28 +20,21 @@ export async function GET(
   try {
     // Extract the product ID from the request parameters
     const { id } = params;
-    let product;
-    if (myCache.has(`product-${id}`)) {
-      product = JSON.parse(myCache.get(`product-${id}`) as string);
-    } else {
-      product = await Product.findById(id).lean();
-      if (!product) {
-        return NextResponse.json(
-          { success: false, message: "Product not found" },
-          { status: 404 }
-        );
-      }
-      const reviews = await Review.find({ productId: id }).lean();
 
-      product.reviews = reviews;
-      myCache.set(`product-${id}`, JSON.stringify(product));
-    }
+    const product: ProductType | null = await Product.findById(
+      id
+    ).lean<ProductType>();
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
         { status: 404 }
       );
     }
+    const reviews = await Review.find({ productId: id });
+
+    product.reviews = reviews;
+    myCache.set(`product-${id}`, JSON.stringify(product));
+
     // Fetch the product by ID from the database
 
     // If the product is not found, return a 404 response
