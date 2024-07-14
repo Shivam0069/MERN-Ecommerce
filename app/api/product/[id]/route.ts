@@ -9,7 +9,6 @@ import { myCache } from "@/helper/myCache";
 import { invalidateCache } from "@/helper/invalidateCache";
 import { uploadImage } from "@/helper/ImageUpload";
 import Review from "@/models/review";
-import { Product as ProductType } from "@/types/types";
 // Establish database connection
 connect();
 
@@ -21,25 +20,17 @@ export async function GET(
     // Extract the product ID from the request parameters
     const { id } = params;
 
-    const product: ProductType | null = await Product.findById(
-      id
-    ).lean<ProductType>();
+    const product = await Product.findById(id).populate({
+      path: "reviews",
+      model: Review,
+    });
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
         { status: 404 }
       );
     }
-    const reviews = await Review.find({ productId: id });
 
-    product.reviews = reviews;
-    myCache.set(`product-${id}`, JSON.stringify(product));
-
-    // Fetch the product by ID from the database
-
-    // If the product is not found, return a 404 response
-
-    // Respond with the product data if found
     return NextResponse.json(
       { success: true, product: product },
       { status: 200 }

@@ -2,6 +2,7 @@ import { connect } from "@/dbConfig/dbConfig";
 import { ReduceStock } from "@/helper/ReduceStock";
 import { invalidateCache } from "@/helper/invalidateCache";
 import Order from "@/models/order";
+import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
 // Establish database connection
@@ -59,6 +60,12 @@ export async function POST(request: NextRequest) {
     //Reducing Stock of the order items
     await ReduceStock(orderItems);
 
+    const userData = await User.findById(user);
+    const productIds = orderItems.map((item: any) => String(item.productId));
+
+    userData.orderedProduct.push(...productIds);
+    // Save the updated user document
+    await userData.save();
     //invalidating cache to remove cache data
     invalidateCache({
       product: true,

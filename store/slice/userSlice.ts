@@ -8,6 +8,7 @@ export interface UserState {
   email: string;
   photo: string;
   password?: string;
+  orderedProduct?: string[];
   type: "credential" | "google";
   role: "admin" | "user";
   gender: "male" | "female";

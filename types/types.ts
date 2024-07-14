@@ -6,6 +6,7 @@ export type User = {
   role: string;
   dob: string;
   _id: string;
+  orderedProduct?: string[];
 };
 export type Review = {
   _id: string;

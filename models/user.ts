@@ -15,6 +15,7 @@ interface IUser extends Document {
   age: number; // Virtual property
   createdAt: Date;
   updatedAt: Date;
+  orderedProduct: string[];
 }
 
 // Create the schema with the fields and types defined
@@ -65,6 +66,10 @@ const userSchema: Schema<IUser> = new Schema(
     dob: {
       type: Date,
       required: [true, "Please enter Date of birth"],
+    },
+    orderedProduct: {
+      type: [String],
+      default: [],
     },
   },
   {

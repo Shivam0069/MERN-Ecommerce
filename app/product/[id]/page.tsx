@@ -36,6 +36,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
+  console.log(user?.orderedProduct, "productDetailUser");
 
   const submitReview = async () => {
     // Validate rating and comment if needed
@@ -191,7 +192,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           <div className="grid gap-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Customer Reviews</h2>
-              {user && (
+              {user?.orderedProduct?.includes(id) && (
                 <Dialog>
                   <DialogTrigger>
                     <Button>Add Review</Button>
@@ -244,7 +245,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
               )}
             </div>
             <div className="grid gap-6">
-              {data?.product?.reviews!.length! > 0 &&
+              {data?.product?.reviews?.length! > 0 &&
                 data?.product.reviews!.map((review, idx) => (
                   <div key={idx} className="flex gap-4">
                     <Avatar className="w-10 h-10 border -z-10 ">
