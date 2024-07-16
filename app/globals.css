@@ -1038,3 +1038,38 @@ a {
 .backface-hidden {
   backface-visibility: hidden;
 }
+
+.btn-4 {
+  overflow: hidden;
+  position: relative;
+
+  span {
+    z-index: 20;
+  }
+
+  &:after {
+    background: #fff;
+
+    content: "";
+    height: 500px;
+    left: 0px;
+    opacity: 0.2;
+    position: absolute;
+    top: -80px;
+    transform: rotate(15deg);
+    width: 80px;
+    z-index: -10;
+
+    animation: slideAnimation 4s linear infinite;
+  }
+}
+
+@keyframes slideAnimation {
+  0% {
+    left: -10px;
+  }
+
+  100% {
+    left: 100%;
+  }
+}

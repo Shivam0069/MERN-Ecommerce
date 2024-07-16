@@ -3,6 +3,7 @@ import Header from "@/components/header";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Loader from "./loader";
+import NewsLetter from "@/components/NewsLetter";
 
 export default function Layout({
   children,
@@ -19,7 +20,7 @@ export default function Layout({
     <Loader />
   ) : (
     <>
-      <Header /> {children}
+      <Header /> {children} <NewsLetter />
     </>
   );
 }
