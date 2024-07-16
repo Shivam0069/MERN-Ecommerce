@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { IoMdShareAlt } from "react-icons/io";
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -115,6 +116,42 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     toast.success("Product added to cart");
     setLoading(false);
   };
+  const shareHandler = () => {
+    const url = window.location.href;
+    const title = "Flash Buy";
+    const text = "Check out this awesome Product!";
+
+    if (navigator.share) {
+      navigator
+        .share({
+          title: title,
+          text: text,
+          url: url,
+        })
+        .then(() => console.log("Successfully shared"))
+        .catch((error) => console.error("Error sharing:", error));
+    } else {
+      // Fallback for devices that do not support the Web Share API
+      const shareText = `${text}\n${url}`;
+      const encodedShareText = encodeURIComponent(shareText);
+      const encodedUrl = encodeURIComponent(url);
+
+      const shareLinks = {
+        twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedShareText}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+        linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${title}&summary=${encodedShareText}`,
+        whatsapp: `https://wa.me/?text=${encodedShareText}`,
+        email: `mailto:?subject=${title}&body=${encodedShareText}`,
+      };
+
+      console.log("Web Share API not supported. Use these links to share:");
+      console.log(shareLinks);
+      alert(
+        "Sharing is not supported in this browser. Copy the URL or use the provided links to share manually."
+      );
+    }
+  };
+
   return isLoading ? (
     <SkeletonProductDetailLoader />
   ) : (
@@ -135,6 +172,9 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
             <p className="text-muted-foreground">
               60% combed ringspun cotton/40% polyester jersey tee.
             </p>
+            <Button onClick={shareHandler} className="mt-2">
+              <IoMdShareAlt className="h-6 w-6  mr-2" /> Share
+            </Button>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">

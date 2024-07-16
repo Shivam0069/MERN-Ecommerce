@@ -38,9 +38,9 @@ export default function NewsLetter() {
     }
   };
   return (
-    <div className="relative w-full my-8 px-2 ">
+    <div className="relative max-w-6xl mx-auto my-8 px-2 ">
       {isLoading && <Loader />}
-      <div className="btn-4 w-full py-4 md:py-10 md:px-10 bg-[#853047]/90 z-10 mx-auto rounded-xl  ">
+      <div className="btn-4 w-full py-4 md:py-16 md:px-10 bg-[#853047]/90 z-10 mx-auto rounded-xl  ">
         <div className="flex w-full justify-center gap-3 sm:justify-between items-center flex-col sm:flex-row text-center sm:text-left">
           <div>
             <p className="text-white text-xl sm:text-2xl">
