@@ -16,6 +16,8 @@ export default function NewsLetter() {
   const subscriptionsHandler = async () => {
     setIsLoading(true);
     if (!validateEmail(email)) {
+      setIsLoading(false);
+
       toast.error("Please Enter Valid Email");
       return;
     }
@@ -61,7 +63,8 @@ export default function NewsLetter() {
                 className=" px-4 py-2 md:py-4 md:w-[500px] rounded-lg focus:outline-none"
                 placeholder="Enter Email Address"
               />
-              <div
+              <button
+                disabled={isLoading}
                 onClick={subscriptionsHandler}
                 className="absolute  top-[50%] -translate-y-[50%] right-2  px-2 sm:px-6 py-1 sm:py-3 space-x-2 rounded-lg flex justify-center items-center bg-[#F00402] text-lg sm:text-xl text-white"
               >
@@ -69,7 +72,7 @@ export default function NewsLetter() {
                 <span className="hidden md:inline-block cursor-pointer">
                   Subscribe
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         </div>
