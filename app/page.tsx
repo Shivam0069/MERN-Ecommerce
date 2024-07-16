@@ -1,7 +1,8 @@
 "use client";
 import banner from "@/assets/banner3.jpg";
+import NewsLetter from "@/components/NewsLetter";
 import ProductCard from "@/components/productCard";
-import Loader, { CircleLoader } from "@/helper/loader";
+import Loader from "@/helper/loader";
 import SkeletonProductLoader from "@/helper/skeletonProductLoader";
 import { useLatestProductsQuery } from "@/store/api/productAPI";
 import { addToCart } from "@/store/slice/cartSlice";
@@ -107,6 +108,7 @@ export default function Home() {
           )}
         </div>
       </section>
+      <NewsLetter />
     </div>
   );
 }

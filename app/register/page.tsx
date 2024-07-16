@@ -12,6 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/firebase";
 import { uploadImage } from "@/helper/ImageUpload";
+import Loader from "@/helper/loader";
 import { useNewCartMutation } from "@/store/api/cartAPI";
 import { updateUser } from "@/store/slice/userSlice";
 import { RootState } from "@/store/store";
@@ -34,6 +35,11 @@ interface FormData {
 }
 
 export default function Register() {
+  const [isEmailverified, setIsEmailVerified] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [otp, setOtp] = useState("");
+  const [enteredOtp, setEnteredOtp] = useState("");
   const dispatch = useDispatch();
   const {
     cartItems,
@@ -62,6 +68,9 @@ export default function Register() {
   useEffect(() => {
     console.log(formData.photo, "photo");
   }, [formData.photo]);
+  useEffect(() => {
+    setIsEmailVerified(false);
+  }, [formData.email]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -211,9 +220,41 @@ export default function Register() {
       toast.error("Sign Up Failed");
     }
   };
+  function validateEmail(email: string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+  const verifyEmail = async () => {
+    setIsLoading(true);
+    try {
+      if (!validateEmail(formData.email)) {
+        toast.error("Please Enter Valid Email");
+        setIsLoading(false);
+
+        return;
+      }
+      const res = await axios.post("/api/verifyemail", {
+        email: formData.email,
+      });
+      toast.success(res.data.message);
+      setOtp(res.data.otp);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (otp.length > 0 && enteredOtp.length > 0 && otp === enteredOtp) {
+      toast.success("OTP Verified");
+      setIsEmailVerified(true);
+    }
+  }, [enteredOtp, otp]);
 
   return (
-    <div className="mx-auto md:max-w-md  space-y-2 pt-10 pb-4 rounded-2xl px-4 border md:max-h-[calc(100vh-41px)]">
+    <div className="mx-auto md:max-w-md  space-y-2 pt-4 pb-4 rounded-2xl px-4 border md:max-h-[calc(100vh-41px)]">
+      {isLoading && <Loader />}
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">Create an account</h1>
         <p className="text-gray-500 dark:text-gray-400">
@@ -294,8 +335,37 @@ export default function Register() {
             </Select>
           </div>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+          <div className="space-y-2 ">
+            <Button
+              disabled={isEmailverified}
+              onClick={verifyEmail}
+              type="button"
+              className="w-full"
+            >
+              Verify Email
+            </Button>
+          </div>
+          {otp.length > 0 && (
+            <div className="space-y-2">
+              <Input
+                id="otp"
+                type="text"
+                required
+                value={enteredOtp}
+                placeholder="Enter Your Otp"
+                onChange={(e) => setEnteredOtp(e.target.value)}
+              />
+            </div>
+          )}
+        </div>
 
-        <Button onClick={signupHandler} type="submit" className="w-full">
+        <Button
+          disabled={!isEmailverified}
+          onClick={signupHandler}
+          type="submit"
+          className="w-full disabled:cursor-not-allowed"
+        >
           Sign Up
         </Button>
       </div>

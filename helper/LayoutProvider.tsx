@@ -20,7 +20,7 @@ export default function Layout({
     <Loader />
   ) : (
     <>
-      <Header /> {children} <NewsLetter />
+      <Header /> {children}
     </>
   );
 }
