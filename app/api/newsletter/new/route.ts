@@ -1,17 +1,14 @@
 import { connect } from "@/dbConfig/dbConfig";
+import sendMail from "@/helper/SendMail";
 import NewsLetter from "@/models/newsletter";
 import { NextRequest, NextResponse } from "next/server";
 connect();
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("1");
-
     const reqBody = await request.json();
-    console.log("2");
 
     const { email } = reqBody;
-    console.log(email, "email");
 
     if (!email) {
       return NextResponse.json(
@@ -26,6 +23,29 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    const res = await sendMail({
+      to: [email],
+      subject: "Welcome to Flash Buy!",
+      message: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <h2>Hi,</h2>
+          <p>Thank you for subscribing to the Flash Buy newsletter!</p>
+          <p>We're excited to have you on board. As a subscriber, you'll be the first to know about our latest products, exclusive deals, special offers, and much more. Stay tuned for exciting updates straight to your inbox.</p>
+          <p>If you have any questions or need assistance, feel free to reach out to our support team at <a href="mailto:support@flashbuy.com">support@flashbuy.com</a>.</p>
+          <p>Happy shopping!</p>
+          <p>Best regards,<br>The Flash Buy Team</p>
+        </div>
+      `,
+    });
+
+    if (res === false) {
+      return NextResponse.json(
+        { success: false, message: "Invalid Email" },
+        { status: 400 }
+      );
+    }
+    console.log(res, "email send response");
+
     const newNewsLetter = new NewsLetter({
       email,
     });
