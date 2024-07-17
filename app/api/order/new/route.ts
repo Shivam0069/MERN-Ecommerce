@@ -1,6 +1,8 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { ReduceStock } from "@/helper/ReduceStock";
+import sendMail from "@/helper/SendMail";
 import { invalidateCache } from "@/helper/invalidateCache";
+import { generateOrderConfirmationEmail } from "@/helper/orderconfirmationmailcontent";
 import Order from "@/models/order";
 import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
@@ -61,11 +63,25 @@ export async function POST(request: NextRequest) {
     await ReduceStock(orderItems);
 
     const userData = await User.findById(user);
+    const email = userData.email;
+
     const productIds = orderItems.map((item: any) => String(item.productId));
 
     userData.orderedProduct.push(...productIds);
     // Save the updated user document
     await userData.save();
+
+    const emailContent = generateOrderConfirmationEmail({
+      orderItems,
+      orderId: newOrder._id,
+      total,
+    });
+
+    const res = await sendMail({
+      to: [email],
+      subject: "Order Confirmation at Flash Buy",
+      message: emailContent,
+    });
     //invalidating cache to remove cache data
     invalidateCache({
       product: true,
