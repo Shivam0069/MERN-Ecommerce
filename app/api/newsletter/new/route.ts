@@ -1,14 +1,16 @@
 import { connect } from "@/dbConfig/dbConfig";
 import sendMail from "@/helper/SendMail";
+import { WhatsAppMessage } from "@/helper/twilioServices";
 import NewsLetter from "@/models/newsletter";
 import { NextRequest, NextResponse } from "next/server";
+import twilio from "twilio";
 connect();
 
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
 
-    const { email } = reqBody;
+    const { email, phoneNumber } = reqBody;
 
     if (!email) {
       return NextResponse.json(
@@ -16,10 +18,23 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    if (!phoneNumber) {
+      return NextResponse.json(
+        { success: false, message: "Phone Number is Required" },
+        { status: 400 }
+      );
+    }
     const isEmailExist = await NewsLetter.findOne({ email });
+    const isPhoneNumberExist = await NewsLetter.findOne({ phoneNumber });
     if (isEmailExist) {
       return NextResponse.json(
-        { success: false, message: "Already Subscribed" },
+        { success: false, message: "Email Already Subscribed" },
+        { status: 400 }
+      );
+    }
+    if (isPhoneNumberExist) {
+      return NextResponse.json(
+        { success: false, message: "Phone Number Already Subscribed" },
         { status: 400 }
       );
     }
@@ -48,8 +63,15 @@ export async function POST(request: NextRequest) {
 
     const newNewsLetter = new NewsLetter({
       email,
+      phoneNumber,
     });
     newNewsLetter.save();
+
+    WhatsAppMessage({
+      body: "Successfully Subscribed to NewsLetter",
+      to: phoneNumber,
+    });
+
     return NextResponse.json(
       {
         success: true,
