@@ -21,6 +21,10 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
     newPassword: "",
     confirmPassword: "",
   });
+  const [passwordVisibility, setPasswordVisibility] = useState({
+    newPassword: false,
+    confirmPassword: false,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const id = params.id;
   const router = useRouter();
@@ -72,7 +76,7 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
             <div className="relative">
               <Input
                 id="password"
-                type="password"
+                type={passwordVisibility.newPassword ? "text" : "password"}
                 placeholder="Enter a new password"
                 onChange={(e) =>
                   setPassword((prev) => ({
@@ -86,6 +90,12 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
                 variant="ghost"
                 size="icon"
                 className="absolute bottom-1 right-1 h-7 w-7"
+                onClick={() =>
+                  setPasswordVisibility((prev) => ({
+                    ...prev,
+                    newPassword: !prev.newPassword,
+                  }))
+                }
               >
                 <EyeIcon className="h-4 w-4" />
                 <span className="sr-only">Toggle password visibility</span>
@@ -97,7 +107,7 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
             <div className="relative">
               <Input
                 id="confirmPassword"
-                type="password"
+                type={passwordVisibility.confirmPassword ? "text" : "password"}
                 placeholder="Confirm your new password"
                 onChange={(e) =>
                   setPassword((prev) => ({
@@ -111,6 +121,12 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
                 variant="ghost"
                 size="icon"
                 className="absolute bottom-1 right-1 h-7 w-7"
+                onClick={() =>
+                  setPasswordVisibility((prev) => ({
+                    ...prev,
+                    confirmPassword: !prev.confirmPassword,
+                  }))
+                }
               >
                 <EyeIcon className="h-4 w-4" />
                 <span className="sr-only">Toggle password visibility</span>
