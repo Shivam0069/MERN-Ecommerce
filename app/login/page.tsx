@@ -131,6 +131,14 @@ export default function Login() {
             <Button onClick={loginHandler} type="button" className="w-full">
               Sign in
             </Button>
+            <div className=" text-end text-xs mt-1">
+              <Link
+                href="/forgot-password"
+                className="text-blue-500 hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
         </form>
         <div className="relative">
