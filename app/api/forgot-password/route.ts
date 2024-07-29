@@ -1,6 +1,7 @@
 import sendMail from "@/helper/SendMail";
 import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -27,6 +28,17 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
+  const tokenData = {
+    email,
+    id: user._id,
+    role: user.role,
+  };
+
+  const tokenSecret = process.env.TOKEN_SECRET!;
+
+  const token = jwt.sign(tokenData, tokenSecret, {
+    expiresIn: "10m",
+  });
 
   const res = await sendMail({
     to: [email],
@@ -35,7 +47,7 @@ export async function POST(request: NextRequest) {
       <div>
         <p>Dear User,</p>
         <p>We received a request to reset your password for your Flash Buy account. Please click the link below to reset your password:</p>
-        <p><a href="https://flash-buy.vercel.app/resetpassword/${user._id}">Reset Password</a></p>
+        <p><a href="https://flash-buy.vercel.app/resetpassword/${user._id}?token=${token}">Reset Password</a></p>
         <p>If you did not request this password reset, please ignore this email or contact support if you have questions.</p>
         <p>Thank you,</p>
         <p>The Flash Buy Team</p>

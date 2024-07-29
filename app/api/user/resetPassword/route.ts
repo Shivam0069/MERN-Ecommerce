@@ -2,15 +2,16 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/user";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 connect();
 
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { id, password } = reqBody;
+    const { id, password, token } = reqBody;
 
-    if (!password || !id) {
+    if (!password || !id || !token) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -21,6 +22,16 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { message: "User does not exist", success: false },
+        { status: 400 }
+      );
+    }
+    const secret = process.env.TOKEN_SECRET!;
+    const decodedToken: any = jwt.verify(token, secret);
+    console.log(decodedToken);
+
+    if (decodedToken.id !== id) {
+      return NextResponse.json(
+        { message: "Expired Link", success: false },
         { status: 400 }
       );
     }

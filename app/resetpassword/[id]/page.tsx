@@ -10,11 +10,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Loader from "@/helper/loader";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ResetPassword({ params }: { params: { id: string } }) {
   const [password, setPassword] = useState({
@@ -28,6 +28,10 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(false);
   const id = params.id;
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const handleSubmit = async () => {
     if (password.newPassword.length === 0) {
       toast.error("Please enter a new password");
@@ -45,6 +49,7 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
       const res = await axios.post("/api/user/resetPassword", {
         password: password.newPassword,
         id,
+        token,
       });
 
       if (res.data.success) {
