@@ -10,7 +10,7 @@ export interface UserState {
   password?: string;
   orderedProduct?: string[];
   type: "credential" | "google";
-  role: "admin" | "user";
+  role: "admin" | "user" | "plus";
   gender: "male" | "female";
   dob: string;
   createdAt: string;
