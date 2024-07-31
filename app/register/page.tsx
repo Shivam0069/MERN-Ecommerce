@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { MdOutlineVerified } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 interface FormData {
   _id: string;
@@ -35,7 +36,7 @@ interface FormData {
 }
 
 export default function Register() {
-  const [isEmailverified, setIsEmailVerified] = useState<boolean>(false);
+  const [isEmailverified, setIsEmailVerified] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [otp, setOtp] = useState("");
@@ -162,6 +163,10 @@ export default function Register() {
       toast.error("Please select a valid image file");
       return;
     }
+    if (!isEmailverified) {
+      toast.error("Please verify your email");
+      return;
+    }
 
     try {
       const url = await uploadImage(photo, "images/users");
@@ -273,16 +278,28 @@ export default function Register() {
               onChange={handleChange}
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="m@example.com"
+              className="pr-10"
               required
               value={formData.email}
               onChange={handleChange}
             />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute bottom-1 right-1 h-7 w-7 z-10 "
+              onClick={verifyEmail}
+            >
+              <MdOutlineVerified
+                fill={isEmailverified ? "blue" : "gray"}
+                className={`h-5 w-5  `}
+              />
+            </Button>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -336,7 +353,7 @@ export default function Register() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-          <div className="space-y-2 ">
+          {/* <div className="space-y-2 ">
             <Button
               disabled={isEmailverified}
               onClick={verifyEmail}
@@ -345,7 +362,7 @@ export default function Register() {
             >
               Verify Email
             </Button>
-          </div>
+          </div> */}
           {otp.length > 0 && (
             <div className="space-y-2">
               <Input
@@ -361,7 +378,6 @@ export default function Register() {
         </div>
 
         <Button
-          disabled={!isEmailverified}
           onClick={signupHandler}
           type="submit"
           className="w-full disabled:cursor-not-allowed"
