@@ -16,6 +16,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   orderedProduct: string[];
+  passwordResetToken?: string;
 }
 
 // Create the schema with the fields and types defined
@@ -71,7 +72,11 @@ const userSchema: Schema<IUser> = new Schema(
       type: [String],
       default: [],
     },
+    passwordResetToken: {
+      type: String,
+    },
   },
+
   {
     timestamps: true, // This will add createdAt and updatedAt timestamps
   }

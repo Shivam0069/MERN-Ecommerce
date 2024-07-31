@@ -25,6 +25,15 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    if (user.passwordResetToken === token) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Token has already been used",
+        },
+        { status: 400 }
+      );
+    }
     const secret = process.env.TOKEN_SECRET!;
     const decodedToken: any = jwt.verify(token, secret);
     console.log(decodedToken);
@@ -39,6 +48,7 @@ export async function POST(request: NextRequest) {
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
     user.password = hashedPassword;
+    user.passwordResetToken = token;
     await user.save();
 
     return NextResponse.json(

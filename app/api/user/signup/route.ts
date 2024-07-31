@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
         photo,
         gender,
         type,
+        passwordResetToken: "",
       });
     } else {
       user = new User({

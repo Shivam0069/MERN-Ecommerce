@@ -58,7 +58,7 @@ export default function ResetPassword({ params }: { params: { id: string } }) {
         toast.error(res.data.message || "Failed to reset password");
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurred");
     } finally {
       setIsLoading(false);
       router.push("/login");
