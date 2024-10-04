@@ -43,7 +43,7 @@ function TableHOC<T extends Object>(
 
     return (
       <div className={containerClassname}>
-        <h2 className="heading">{heading}</h2>
+        <h2 className="!font-semibold heading">{heading}</h2>
 
         <table className="table" {...getTableProps()}>
           <thead>

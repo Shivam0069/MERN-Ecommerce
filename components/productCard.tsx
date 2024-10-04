@@ -41,7 +41,7 @@ export default function ProductCard({
         alt="Product Image"
         width={300}
         height={300}
-        className="w-full h-60 object-cover"
+        className="w-full h-60 object-contain"
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold text-card-foreground">{name}</h3>

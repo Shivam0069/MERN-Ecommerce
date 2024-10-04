@@ -71,7 +71,7 @@ const Dashboard = () => {
 
           <section className="graph-container">
             <div className="revenue-chart">
-              <h2>Revenue</h2>
+              <h2 className="!font-semibold">Revenue</h2>
               <BarChart
                 data_1={data?.stats.chart.revenue || []}
                 data_2={[]}
@@ -95,9 +95,9 @@ const Dashboard = () => {
             </div>
 
             <div className="dashboard-categories ">
-              <h2>Inventory</h2>
+              <h2 className="!font-semibold">Inventory</h2>
 
-              <div>
+              <div className="!mt-4 !space-y-2">
                 {data?.stats.categoryCount.map((item, idx) => {
                   const [key, value] = Object.entries(item)[0];
                   return (
@@ -212,17 +212,20 @@ interface CategoryItemProps {
 }
 
 const CategoryItem = ({ color, value, heading }: CategoryItemProps) => (
-  <div className="category-item  !justify-center !px-0 ">
-    <h5 className="!text-xs !text-black !font-medium capitalize">{heading}</h5>
-    <div>
-      <div
-        style={{
-          backgroundColor: color,
-          width: `${value}%`,
-        }}
-      ></div>
+  <div className=" flex flex-col items-center justify-center ">
+    <h5 className="text-base text-black font-medium capitalize">{heading}</h5>
+    <div className="flex gap-3 items-center">
+      <div className="w-[5rem] h-[0.5rem] bg-[#ccc] rounded-md">
+        <div
+          className="h-full rounded-md"
+          style={{
+            backgroundColor: color,
+            width: `${value}%`,
+          }}
+        ></div>
+      </div>
+      <span className="!text-xs">{value}%</span>
     </div>
-    <span className="!text-xs">{value}%</span>
   </div>
 );
 
